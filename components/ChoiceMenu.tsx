@@ -13,9 +13,11 @@ type Props = {
   onPick: (index: number) => void;
   disabled?: boolean;
   footer?: React.ReactNode;
+  /** Jev mode: the option Jev picked, shown as the cursor. */
+  highlight?: number;
 };
 
-export default function ChoiceMenu({ prompt, options, onPick, disabled, footer }: Props) {
+export default function ChoiceMenu({ prompt, options, onPick, disabled, footer, highlight }: Props) {
   const firstEnabled = Math.max(0, options.findIndex((o) => !o.disabled));
   const [cursor, setCursor] = useState(firstEnabled);
 
@@ -77,10 +79,10 @@ export default function ChoiceMenu({ prompt, options, onPick, disabled, footer }
                 onPick(i);
               }}
               className={`flex w-full items-start gap-2 px-1 py-1 text-left text-[11px] leading-[1.7] sm:text-[12px] ${
-                o.disabled ? "text-[#5f574f] line-through" : i === cursor ? "text-[#ffec27]" : "text-[#fff1e8]"
-              } ${disabled ? "opacity-50" : ""}`}
+                o.disabled ? "text-[#5f574f] line-through" : i === (highlight ?? cursor) ? "text-[#ffec27]" : "text-[#fff1e8]"
+              } ${disabled && highlight === undefined ? "opacity-50" : ""}`}
             >
-              <span className="w-3 shrink-0">{i === cursor && !o.disabled ? "▶" : ""}</span>
+              <span className="w-3 shrink-0">{i === (highlight ?? cursor) && !o.disabled ? "▶" : ""}</span>
               <span>{o.label}</span>
             </button>
           </li>

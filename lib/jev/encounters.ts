@@ -1,4 +1,4 @@
-import type { Question } from "./types";
+import type { EvalSpec, Question } from "./types";
 
 /**
  * Every question Jev can be asked lives here. The API route only accepts an
@@ -289,6 +289,31 @@ export const ENCOUNTERS = {
       },
     },
   },
+  // Jev mode: Jev also plays the hero's side of every fight.
+  hero_combat: {
+    npc: "Héroe (Jev)",
+    title: "Turno del héroe",
+    primary: "action",
+    questions: {
+      action: {
+        type: "choice",
+        instructions:
+          "You are the traveler, the hero of this story. Turn-based duel: choose the hero's action for this turn according to the hero's personality, both health bars and the enemy's last action.",
+        criteria: {
+          attack: "Attacks with the sword",
+          defend: "Raises their guard to take less damage this turn",
+          potion: "Drinks a healing potion (+30 HP), only possible if potions remain",
+          flee: "Tries to run away from the fight (may fail)",
+        },
+      },
+    },
+    meta: {
+      action: {
+        label: "¿Qué hace el héroe?",
+        options: { attack: "Atacar", defend: "Defender", potion: "Poción", flee: "Huir" },
+      },
+    },
+  },
 } satisfies Record<string, Encounter>;
 
 export type EncounterId = keyof typeof ENCOUNTERS;
@@ -297,4 +322,8 @@ export const ENCOUNTER_IDS = Object.keys(ENCOUNTERS) as [EncounterId, ...Encount
 
 export function getEncounter(id: EncounterId): Encounter {
   return ENCOUNTERS[id];
+}
+
+export function encounterSpec(id: EncounterId): EvalSpec {
+  return { encounterId: id, ...ENCOUNTERS[id] };
 }

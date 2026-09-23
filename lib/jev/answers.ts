@@ -1,4 +1,3 @@
-import { getEncounter, type EncounterId } from "./encounters";
 import type { Answer, JevState, Question } from "./types";
 
 const clamp01 = (n: number) => Math.min(1, Math.max(0, n));
@@ -71,8 +70,10 @@ function normalize(weights: Record<string, number>) {
  * Offline stand-in used only when the gateway is unreachable, so the demo
  * never dead-ends. Clearly flagged as "fallback" in the UI.
  */
-export function fallbackAnswers(encounterId: EncounterId, state: JevState): Record<string, Answer> {
-  const { questions } = getEncounter(encounterId);
+export function fallbackAnswers(
+  questions: Record<string, Question>,
+  state: JevState,
+): Record<string, Answer> {
   const hp = Number(state.npcHealth ?? 1);
   const maxHp = Number(state.npcMaxHealth ?? hp) || 1;
   const hurt = hp / maxHp < 0.35;
@@ -87,6 +88,7 @@ export function fallbackAnswers(encounterId: EncounterId, state: JevState): Reco
         if (hurt && option === "heal" && healsLeft > 0) w *= 3;
         if (hurt && option === "flee") w *= 1.5;
         if (option === "heal" && healsLeft <= 0) w *= 0.1;
+        if (option === "potion" && Number(state.potions ?? 0) <= 0) w *= 0.05;
         weights[option] = w;
       }
       const probabilities = normalize(weights);

@@ -2,12 +2,13 @@
 
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { setMuted as setAudioMuted, sfx } from "@/lib/audio/chiptune";
-import { requestDecision } from "@/lib/jev/client";
-import { isTypingTarget } from "@/lib/keys";
+import { requestDecision, requestHeroChoice } from "@/lib/jev/client";
 import { getEncounter, type EncounterId } from "@/lib/jev/encounters";
+import { HERO_PERSONALITIES, heroCombatState, type HeroPersonality } from "@/lib/jev/hero";
 import type { JevDecision, JevState } from "@/lib/jev/types";
+import { isTypingTarget } from "@/lib/keys";
 import type { SpriteId } from "@/lib/pixel/sprites";
-import { ENEMIES, type CombatOutcome } from "@/lib/story/combat";
+import { ENEMIES, type CombatOutcome, type CombatState, type Enemy, type PlayerAction } from "@/lib/story/combat";
 import { INITIAL_STATE, isHesitant, primaryAnswer } from "@/lib/story/state";
 import { CHAPTER_STARTS, NODES, START_NODE } from "@/lib/story/story";
 import type { CombatNode, EndingId, GameState, Line, NpcId, Option, Ref, StoryNode } from "@/lib/story/types";
@@ -22,16 +23,32 @@ type Phase =
   | { t: "title" }
   | { t: "chapter"; key: number; number: string; title: string; next: string; state: GameState }
   | { t: "dialog"; key: number; lines: Line[]; next: Ref; state: GameState }
-  | { t: "choose"; key: number; prompt: Line; options: Option[] }
+  | { t: "choose"; key: number; prompt: Line; options: Option[]; picked?: number }
   | { t: "thinking"; text: string }
   | { t: "combat"; key: number; node: CombatNode }
   | { t: "ending"; ending: EndingId };
 
+/** "player": you are the hero. "jev": Jev plays the hero too, against Jev-driven NPCs. */
+type GameMode = { kind: "player" } | { kind: "jev"; personality: HeroPersonality };
+type MoodTarget = NpcId | "hero";
+
+const MODE_OPTIONS: { label: string; mode: GameMode }[] = [
+  { label: "Jugar: tú eres el héroe", mode: { kind: "player" } },
+  ...(Object.keys(HERO_PERSONALITIES) as HeroPersonality[]).map((p) => ({
+    label: `Modo Jev: héroe ${HERO_PERSONALITIES[p].label}`,
+    mode: { kind: "jev", personality: p } as GameMode,
+  })),
+];
+
 const ENDINGS_KEY = "eldmoor.endings";
 const MIN_THINKING_MS = 650;
+/** Jev mode: how long the hero's pick stays highlighted before the story moves on. */
+const PICK_PAUSE_MS = 1300;
+const HERO_LABEL = { npc: "Héroe (Jev)", title: "Decisión del héroe" };
 
 const resolveRef = (ref: Ref, s: GameState) => (typeof ref === "function" ? ref(s) : ref);
 const wait = (ms: number) => new Promise((r) => setTimeout(r, ms));
+const lineText = (l: Line) => (l.who ? `${l.who}: ${l.text}` : l.text);
 
 function loadEndings(): EndingId[] {
   try {
@@ -41,12 +58,12 @@ function loadEndings(): EndingId[] {
   }
 }
 
-function buildActors(node: StoryNode | null, s: GameState, moodTarget: NpcId | null, mood: Mood): Actor[] {
+function buildActors(node: StoryNode | null, s: GameState, moodTarget: MoodTarget | null, mood: Mood): Actor[] {
   if (!node) return [];
   const cast = typeof node.cast === "function" ? node.cast(s) : (node.cast ?? []);
   const look = node.hero ?? "normal";
   const actors: Actor[] = [];
-  const withMood = (id: NpcId): Mood => (id === moodTarget ? mood : "idle");
+  const withMood = (id: MoodTarget): Mood => (id === moodTarget ? mood : "idle");
 
   if (look !== "hidden") {
     const allies: NpcId[] = [];
@@ -55,7 +72,15 @@ function buildActors(node: StoryNode | null, s: GameState, moodTarget: NpcId | n
     allies.forEach((id, i) =>
       actors.push({ sprite: id as SpriteId, x: 32 - i * 26, scale: 2, flip: false, role: "ally", mood: withMood(id) }),
     );
-    actors.push({ sprite: "hero", x: 60, scale: 2, flip: false, role: "hero", crown: look === "crowned" });
+    actors.push({
+      sprite: "hero",
+      x: 60,
+      scale: 2,
+      flip: false,
+      role: "hero",
+      crown: look === "crowned",
+      mood: withMood("hero"),
+    });
   }
   cast.forEach((id, i) => {
     const big = id === "grul" || id === "morvath";
@@ -75,29 +100,41 @@ export default function Game({ debug = false }: { debug?: boolean }) {
   const [nodeId, setNodeId] = useState<string | null>(null);
   const [game, setGame] = useState<GameState>(INITIAL_STATE);
   const [phase, setPhase] = useState<Phase>({ t: "title" });
+  const [mode, setMode] = useState<GameMode>({ kind: "player" });
   const [decisions, setDecisions] = useState<JevDecision[]>([]);
   const [thinking, setThinking] = useState<{ npc: string; title: string } | null>(null);
-  const [mood, setMood] = useState<{ target: NpcId | null; mood: Mood }>({ target: null, mood: "idle" });
+  const [mood, setMood] = useState<{ target: MoodTarget | null; mood: Mood }>({ target: null, mood: "idle" });
   const [fx, setFx] = useState<SceneFx>({ shake: 0, hitHero: 0, hitNpc: 0 });
   const [muted, setMuted] = useState(false);
   const [panelOpen, setPanelOpen] = useState(true);
   const [discovered, setDiscovered] = useState<EndingId[]>([]);
   const keyRef = useRef(0);
   const runRef = useRef(0);
+  const modeRef = useRef<GameMode>(mode);
+  /** Last lines of story text, given to Jev when it plays the hero. */
+  const recentRef = useRef<string[]>([]);
 
   const node = nodeId ? NODES[nodeId] : null;
+  const jevMode = mode.kind === "jev";
+
+  const remember = (texts: string[]) => {
+    recentRef.current = [...recentRef.current, ...texts].slice(-4);
+  };
 
   // ── Jev ────────────────────────────────────────────────────
-  const decide = useCallback(
-    async (encounterId: EncounterId, state: JevState, target: NpcId): Promise<JevDecision> => {
-      const enc = getEncounter(encounterId);
-      setThinking({ npc: enc.npc, title: enc.title });
+  const think = useCallback(
+    async (
+      target: MoodTarget,
+      label: { npc: string; title: string },
+      request: () => Promise<JevDecision>,
+    ): Promise<JevDecision> => {
+      setThinking(label);
       setMood({ target, mood: "thinking" });
       sfx.think();
-      const [d] = await Promise.all([requestDecision(encounterId, state), wait(MIN_THINKING_MS)]);
+      const [d] = await Promise.all([request(), wait(MIN_THINKING_MS)]);
       setDecisions((prev) => [...prev, d]);
       setThinking(null);
-      const primary = primaryAnswer(d, enc.primary);
+      const primary = primaryAnswer(d, d.primary);
       setMood({ target, mood: primary && isHesitant(primary) ? "hesitant" : "decided" });
       sfx.decide();
       return d;
@@ -105,7 +142,21 @@ export default function Game({ debug = false }: { debug?: boolean }) {
     [],
   );
 
+  const decide = useCallback(
+    (encounterId: EncounterId, state: JevState, target: MoodTarget) => {
+      const enc = getEncounter(encounterId);
+      return think(target, { npc: enc.npc, title: enc.title }, () => requestDecision(encounterId, state));
+    },
+    [think],
+  );
+
   // ── Story engine ───────────────────────────────────────────
+  const enterRef = useRef<(id: string, s: GameState) => void>(() => {});
+  const advance = useCallback((ref: Ref, s: GameState) => {
+    const id = resolveRef(ref, s);
+    enterRef.current(s.playerHealth <= 0 ? "end_fall" : id, s);
+  }, []);
+
   const enter = useCallback(
     (id: string, s: GameState) => {
       const n = NODES[id];
@@ -123,18 +174,39 @@ export default function Game({ debug = false }: { debug?: boolean }) {
           break;
         case "say": {
           const s2 = n.effect ? n.effect(s) : s;
+          const lines = typeof n.lines === "function" ? n.lines(s2) : n.lines;
+          remember(lines.map(lineText));
           setGame(s2);
-          setPhase({ t: "dialog", key, lines: typeof n.lines === "function" ? n.lines(s2) : n.lines, next: n.next, state: s2 });
+          setPhase({ t: "dialog", key, lines, next: n.next, state: s2 });
           break;
         }
-        case "choose":
-          setPhase({ t: "choose", key, prompt: n.prompt, options: n.options(s) });
+        case "choose": {
+          const options = n.options(s);
+          setPhase({ t: "choose", key, prompt: n.prompt, options });
+          const m = modeRef.current;
+          if (m.kind !== "jev") break;
+          void think("hero", HERO_LABEL, () => requestHeroChoice(id, s, m.personality, recentRef.current)).then(
+            (d) => {
+              if (run !== runRef.current) return;
+              const a = primaryAnswer(d, d.primary);
+              let idx = a ? Number(a.choice.replace("opt_", "")) : -1;
+              if (!options[idx] || options[idx].disabled) idx = options.findIndex((o) => !o.disabled);
+              const o = options[idx];
+              remember([`El héroe eligió: ${o.label}`]);
+              setPhase((p) => (p.t === "choose" && p.key === key ? { ...p, picked: idx } : p));
+              setTimeout(() => {
+                if (run === runRef.current) advance(o.next, o.apply ? o.apply(s) : s);
+              }, PICK_PAUSE_MS);
+            },
+          );
           break;
+        }
         case "jev":
           setPhase({ t: "thinking", text: n.thinking });
           void decide(n.encounter, n.buildState(s), n.npc).then((d) => {
             if (run !== runRef.current) return;
             const r = n.resolve(s, d);
+            remember(r.lines.map(lineText));
             setGame(r.state);
             setPhase({ t: "dialog", key: ++keyRef.current, lines: r.lines, next: r.next, state: r.state });
           });
@@ -157,64 +229,65 @@ export default function Game({ debug = false }: { debug?: boolean }) {
         }
       }
     },
-    [decide],
+    [decide, think, advance],
   );
 
-  const goto = useCallback(
-    (ref: Ref, s: GameState) => {
-      const id = resolveRef(ref, s);
-      enter(s.playerHealth <= 0 ? "end_fall" : id, s);
-    },
-    [enter],
-  );
+  useEffect(() => {
+    enterRef.current = enter;
+  }, [enter]);
 
   const start = useCallback(
-    (id = START_NODE, s = INITIAL_STATE) => {
+    (m: GameMode) => {
       runRef.current++;
+      modeRef.current = m;
+      recentRef.current = [];
+      setMode(m);
       setDecisions([]);
       setThinking(null);
-      enter(id, s);
+      enter(START_NODE, INITIAL_STATE);
     },
     [enter],
   );
+
+  const backToTitle = useCallback(() => {
+    runRef.current++;
+    setNodeId(null);
+    setThinking(null);
+    setMood({ target: null, mood: "idle" });
+    setPhase({ t: "title" });
+  }, []);
 
   // Chapter cards advance on their own.
   useEffect(() => {
     if (phase.t !== "chapter") return;
-    const id = setTimeout(() => goto(phase.next, phase.state), 2200);
+    const id = setTimeout(() => advance(phase.next, phase.state), 2200);
     return () => clearTimeout(id);
-  }, [phase, goto]);
+  }, [phase, advance]);
 
-  // Global keys: title start, chapter skip, panel, mute.
+  // Global keys: chapter skip, panel, mute.
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
       if (isTypingTarget(e)) return;
       const k = e.key.toLowerCase();
       if (k === "j") setPanelOpen((o) => !o);
       else if (k === "m") setMuted((m) => !m);
-      else if ((e.key === "Enter" || e.key === " ") && !e.repeat) {
-        if (phase.t === "title") {
-          e.preventDefault();
-          sfx.select();
-          start();
-        } else if (phase.t === "chapter") {
-          e.preventDefault();
-          goto(phase.next, phase.state);
-        }
+      else if ((e.key === "Enter" || e.key === " ") && !e.repeat && phase.t === "chapter") {
+        e.preventDefault();
+        advance(phase.next, phase.state);
       }
     };
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
-  }, [phase, start, goto]);
+  }, [phase, advance]);
 
   useEffect(() => setAudioMuted(muted), [muted]);
 
   const onCombatEnd = useCallback(
     (outcome: CombatOutcome, s: GameState) => {
       if (phase.t !== "combat") return;
-      goto(phase.node.outcomes[outcome], s);
+      advance(phase.node.outcomes[outcome], s);
     },
-    [phase, goto],
+    [phase, advance],
   );
 
   const onHit = useCallback((who: "hero" | "npc") => {
@@ -225,6 +298,18 @@ export default function Game({ debug = false }: { debug?: boolean }) {
     }));
   }, []);
 
+  // Jev mode: Jev picks the hero's combat action.
+  const heroCombatPick = useMemo(() => {
+    if (mode.kind !== "jev") return undefined;
+    const { personality } = mode;
+    return async (enemy: Enemy, c: CombatState, s: GameState): Promise<PlayerAction> => {
+      const d = await think("hero", { npc: "Héroe (Jev)", title: `Turno del héroe vs ${enemy.name}` }, () =>
+        requestDecision("hero_combat", heroCombatState(enemy, c, s, personality)),
+      );
+      return (primaryAnswer(d, d.primary)?.choice ?? "attack") as PlayerAction;
+    };
+  }, [mode, think]);
+
   const scene = phase.t === "title" || !node ? "title" : node.scene;
   const actors = useMemo(
     () => (phase.t === "title" ? [] : buildActors(node, game, mood.target, mood.mood)),
@@ -234,8 +319,20 @@ export default function Game({ debug = false }: { debug?: boolean }) {
   return (
     <main className="mx-auto flex min-h-dvh max-w-[1400px] flex-col gap-4 px-4 py-4 lg:py-6">
       <header className="flex flex-wrap items-center justify-between gap-3">
-        <h1 className="text-[12px] text-[#ffec27] sm:text-[14px]">CRONICAS DE ELDMOOR</h1>
+        <div className="flex flex-wrap items-center gap-3">
+          <h1 className="text-[12px] text-[#ffec27] sm:text-[14px]">CRONICAS DE ELDMOOR</h1>
+          {mode.kind === "jev" && phase.t !== "title" ? (
+            <span className="bg-[#ff77a8] px-2 py-1 text-[8px] text-black">
+              MODO JEV · HEROE {HERO_PERSONALITIES[mode.personality].label.toUpperCase()}
+            </span>
+          ) : null}
+        </div>
         <div className="flex items-center gap-2 text-[9px]">
+          {phase.t !== "title" ? (
+            <button type="button" className="pixel-btn" onClick={backToTitle}>
+              MENU
+            </button>
+          ) : null}
           <button type="button" className="pixel-btn" onClick={() => setMuted((m) => !m)}>
             {muted ? "SONIDO: NO" : "SONIDO: SI"} [M]
           </button>
@@ -249,11 +346,11 @@ export default function Game({ debug = false }: { debug?: boolean }) {
         <section className="mx-auto w-full max-w-[960px] space-y-3">
           <div className="screen relative aspect-video w-full overflow-hidden">
             <SceneView scene={scene} actors={actors} fx={fx} />
-            {phase.t === "title" ? <TitleOverlay onStart={() => start()} /> : null}
+            {phase.t === "title" ? <TitleOverlay /> : null}
             {phase.t === "chapter" ? (
               <button
                 type="button"
-                onClick={(e) => e.detail !== 0 && goto(phase.next, phase.state)}
+                onClick={(e) => e.detail !== 0 && advance(phase.next, phase.state)}
                 className="chapter-card absolute inset-0 flex flex-col items-center justify-center gap-4 bg-black/85"
               >
                 <span className="text-[10px] text-[#c2c3c7] sm:text-[12px]">{phase.number}</span>
@@ -265,16 +362,30 @@ export default function Game({ debug = false }: { debug?: boolean }) {
           </div>
 
           {phase.t === "dialog" ? (
-            <DialogBox key={phase.key} lines={phase.lines} onDone={() => goto(phase.next, phase.state)} />
+            <DialogBox
+              key={phase.key}
+              lines={phase.lines}
+              onDone={() => advance(phase.next, phase.state)}
+              autoAdvance={jevMode}
+            />
           ) : null}
           {phase.t === "choose" ? (
             <ChoiceMenu
               key={phase.key}
-              prompt={phase.prompt}
+              prompt={
+                jevMode
+                  ? {
+                      ...phase.prompt,
+                      text: `${phase.prompt.text} ${phase.picked === undefined ? "(Jev está decidiendo...)" : "(Jev decidió)"}`,
+                    }
+                  : phase.prompt
+              }
               options={phase.options}
+              disabled={jevMode}
+              highlight={jevMode ? phase.picked : undefined}
               onPick={(i) => {
                 const o = phase.options[i];
-                goto(o.next, o.apply ? o.apply(game) : game);
+                advance(o.next, o.apply ? o.apply(game) : game);
               }}
             />
           ) : null}
@@ -295,6 +406,7 @@ export default function Game({ debug = false }: { debug?: boolean }) {
               decide={(id, st) => decide(id, st, phase.node.enemy)}
               onHit={onHit}
               onEnd={onCombatEnd}
+              autoPick={heroCombatPick}
             />
           ) : null}
           {phase.t === "ending" ? (
@@ -303,23 +415,30 @@ export default function Game({ debug = false }: { debug?: boolean }) {
               game={game}
               decisions={decisions}
               discovered={discovered}
-              onRestart={() => start()}
+              onRestart={backToTitle}
             />
           ) : null}
           {phase.t === "title" ? (
-            <div className="pixel-box space-y-3 p-4 text-[10px] leading-[1.9] text-[#c2c3c7]">
-              <p>
-                Una aventura de 5 capítulos y <span className="text-[#ffec27]">4 finales</span>. Tú eliges cómo
-                actuar; <span className="text-[#ff77a8]">Jev</span> decide qué hacen los demás.
-              </p>
-              <p>
-                Cada NPC recibe un estado tipado y Jev devuelve una decisión con probabilidades y confianza. No
-                genera diálogo: es lógica de juego.
-              </p>
-              <p className="text-[9px] text-[#5f574f]">
-                Controles: ↑↓ / 1-4 elegir · ENTER avanzar · J panel de Jev · M sonido
-              </p>
-            </div>
+            <>
+              <ChoiceMenu
+                prompt={{ text: "Elige un modo de juego:" }}
+                options={MODE_OPTIONS}
+                onPick={(i) => start(MODE_OPTIONS[i].mode)}
+              />
+              <div className="pixel-box space-y-3 p-4 text-[10px] leading-[1.9] text-[#c2c3c7]">
+                <p>
+                  Una aventura de 5 capítulos y <span className="text-[#ffec27]">4 finales</span>. Tú eliges cómo
+                  actuar; <span className="text-[#ff77a8]">Jev</span> decide qué hacen los demás.
+                </p>
+                <p>
+                  En el <span className="text-[#ff77a8]">Modo Jev</span> tú solo miras: Jev juega al héroe con la
+                  personalidad elegida, contra NPCs que también decide Jev.
+                </p>
+                <p className="text-[9px] text-[#5f574f]">
+                  Controles: ↑↓ / 1-4 elegir · ENTER avanzar · J panel de Jev · M sonido
+                </p>
+              </div>
+            </>
           ) : null}
 
           {debug ? (
@@ -344,23 +463,15 @@ export default function Game({ debug = false }: { debug?: boolean }) {
   );
 }
 
-function TitleOverlay({ onStart }: { onStart: () => void }) {
+function TitleOverlay() {
   return (
-    <button
-      type="button"
-      onClick={(e) => {
-        if (e.detail === 0) return;
-        sfx.select();
-        onStart();
-      }}
-      className="absolute inset-0 flex flex-col items-center justify-center gap-3 text-center"
-    >
+    <div className="pointer-events-none absolute inset-0 flex flex-col items-center justify-center gap-3 text-center">
       <span className="title-glow px-4 text-[18px] leading-[1.4] text-[#ffec27] sm:text-[32px]">
         CRONICAS DE ELDMOOR
       </span>
       <span className="text-[9px] text-[#ff77a8] sm:text-[12px]">~ La Corona de Brasas ~</span>
-      <span className="blink mt-6 text-[9px] text-[#fff1e8] sm:text-[11px]">PULSA ENTER PARA EMPEZAR</span>
-    </button>
+      <span className="blink mt-6 text-[9px] text-[#fff1e8] sm:text-[11px]">ELIGE UN MODO ▼</span>
+    </div>
   );
 }
 

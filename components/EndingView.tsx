@@ -2,7 +2,6 @@
 
 import { useEffect } from "react";
 import { isTypingTarget } from "@/lib/keys";
-import { getEncounter } from "@/lib/jev/encounters";
 import type { JevDecision } from "@/lib/jev/types";
 import { ENDINGS } from "@/lib/story/endings";
 import type { EndingId, GameState } from "@/lib/story/types";
@@ -19,7 +18,7 @@ const ORDER: EndingId[] = ["hero", "pact", "exile", "fall"];
 
 export default function EndingView({ ending, game, decisions, discovered, onRestart }: Props) {
   const e = ENDINGS[ending];
-  const story = decisions.filter((d) => !d.encounterId.startsWith("combat_"));
+  const story = decisions.filter((d) => !d.encounterId.includes("combat"));
   const combatTurns = decisions.length - story.length;
 
   useEffect(() => {
@@ -50,7 +49,7 @@ export default function EndingView({ ending, game, decisions, discovered, onRest
         <div className="mb-2 text-[9px] text-[#ff77a8]">LO QUE DECIDIO JEV</div>
         <ul className="space-y-1 text-[9px] leading-[1.8]">
           {story.map((d) => {
-            const enc = getEncounter(d.encounterId);
+            const enc = d;
             const a = d.answers[enc.primary];
             if (a?.type !== "choice") return null;
             return (

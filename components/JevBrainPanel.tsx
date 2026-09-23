@@ -1,7 +1,6 @@
 "use client";
 
 import { useState } from "react";
-import { getEncounter } from "@/lib/jev/encounters";
 import { HESITATION_THRESHOLD, type Answer, type JevDecision, type JevValue } from "@/lib/jev/types";
 
 type Props = {
@@ -121,7 +120,6 @@ export default function JevBrainPanel({ decisions, thinking }: Props) {
   const [selected, setSelected] = useState<string | null>(null);
   const latest = decisions.at(-1);
   const current = decisions.find((d) => d.id === selected) ?? latest;
-  const encounter = current ? getEncounter(current.encounterId) : null;
 
   return (
     <div className="pixel-box space-y-4 p-4">
@@ -132,11 +130,11 @@ export default function JevBrainPanel({ decisions, thinking }: Props) {
 
       {thinking ? (
         <div className="border-2 border-dashed border-[#29adff] p-3 text-[9px] leading-[1.8] text-[#29adff]">
-          <span className="blink">●</span> Evaluando a {thinking.npc} · {thinking.title}...
+          <span className="blink">●</span> Evaluando: {thinking.npc} · {thinking.title}...
         </div>
       ) : null}
 
-      {!current || !encounter ? (
+      {!current ? (
         <p className="text-[9px] leading-[1.9] text-[#c2c3c7]">
           Aquí verás cada decisión de los NPC: el <span className="text-[#ffec27]">estado</span> que recibe Jev, la
           probabilidad de cada opción y su <span className="text-[#29adff]">confianza</span>. El juego ejecuta la
@@ -159,7 +157,7 @@ export default function JevBrainPanel({ decisions, thinking }: Props) {
             ) : null}
           </div>
           <div>
-            <div className="text-[10px]">{encounter.title}</div>
+            <div className="text-[10px]">{current.title}</div>
             <div className="mt-1 text-[8px] text-[#5f574f]">model: typesafe-ai/jev</div>
           </div>
 
@@ -184,9 +182,9 @@ export default function JevBrainPanel({ decisions, thinking }: Props) {
               <AnswerView
                 key={id}
                 answer={a}
-                label={encounter.meta[id]?.label ?? id}
-                options={encounter.meta[id]?.options}
-                levels={encounter.meta[id]?.levels}
+                label={current.meta[id]?.label ?? id}
+                options={current.meta[id]?.options}
+                levels={current.meta[id]?.levels}
               />
             ))}
           </div>
@@ -198,7 +196,7 @@ export default function JevBrainPanel({ decisions, thinking }: Props) {
           <div className="mb-2 text-[9px] text-[#c2c3c7]">HISTORIAL ({decisions.length})</div>
           <ol className="max-h-40 space-y-1 overflow-auto">
             {[...decisions].reverse().map((d) => {
-              const enc = getEncounter(d.encounterId);
+              const enc = d;
               const a = d.answers[enc.primary];
               const choice = a?.type === "choice" ? (enc.meta[enc.primary]?.options?.[a.choice] ?? a.choice) : "—";
               const active = d.id === current?.id;

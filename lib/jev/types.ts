@@ -1,4 +1,4 @@
-import type { EncounterId } from "./encounters";
+import type { QuestionMeta } from "./encounters";
 
 export type ChoiceQuestion = {
   type: "choice";
@@ -39,10 +39,24 @@ export type Answer = ChoiceAnswer | BooleanAnswer | ScoreAnswer;
 export type JevValue = string | number | boolean | null | string[];
 export type JevState = Record<string, JevValue>;
 
+/** Everything needed to ask Jev one batch of questions and display the result. */
+export type EvalSpec = {
+  encounterId: string;
+  npc: string;
+  title: string;
+  /** The question whose answer drives the game. */
+  primary: string;
+  questions: Record<string, Question>;
+  meta: Record<string, QuestionMeta>;
+};
+
 export type JevDecision = {
   id: string;
-  encounterId: EncounterId;
+  encounterId: string;
   npc: string;
+  title: string;
+  primary: string;
+  meta: Record<string, QuestionMeta>;
   state: JevState;
   answers: Record<string, Answer>;
   latencyMs: number;

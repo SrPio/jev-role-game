@@ -13,10 +13,15 @@ const SPEAKER_COLORS: Record<string, string> = {
   Morvath: "text-[#ff004d]",
 };
 
-type Props = { lines: Line[]; onDone: () => void };
+type Props = {
+  lines: Line[];
+  onDone: () => void;
+  /** Jev mode: advance on its own after a reading pause. */
+  autoAdvance?: boolean;
+};
 
 /** JRPG-style dialog with a typewriter effect. Remount (via `key`) for each new batch of lines. */
-export default function DialogBox({ lines, onDone }: Props) {
+export default function DialogBox({ lines, onDone, autoAdvance = false }: Props) {
   const [idx, setIdx] = useState(0);
   const [shown, setShown] = useState(0);
   const line = lines[idx] ?? { text: "" };
@@ -43,6 +48,12 @@ export default function DialogBox({ lines, onDone }: Props) {
       onDone();
     }
   }, [full, idx, line.text.length, lines.length, onDone]);
+
+  useEffect(() => {
+    if (!autoAdvance || !full) return;
+    const id = setTimeout(advance, 900 + line.text.length * 18);
+    return () => clearTimeout(id);
+  }, [autoAdvance, full, advance, line.text.length]);
 
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {

@@ -1,25 +1,21 @@
 import "server-only";
 import { experimental_evaluate as evaluate } from "ai";
 import { fallbackAnswers, normalizeAnswers } from "./answers";
-import { getEncounter, type EncounterId } from "./encounters";
-import type { JevDecision, JevState } from "./types";
+import type { EvalSpec, JevDecision, JevState } from "./types";
 
 export const JEV_MODEL = "typesafe-ai/jev";
 
-/** Asks Jev (via Vercel AI Gateway) every question of an encounter in one call. */
-export async function askJev(
-  encounterId: EncounterId,
-  state: JevState,
-): Promise<Omit<JevDecision, "id">> {
-  const encounter = getEncounter(encounterId);
+/** Asks Jev (via Vercel AI Gateway) every question of a spec in one call. */
+export async function askJev(spec: EvalSpec, state: JevState): Promise<Omit<JevDecision, "id">> {
   const started = performance.now();
-  const base = { encounterId, npc: encounter.npc, state };
+  const { questions, ...info } = spec;
+  const base = { ...info, state };
 
   try {
     const result = await evaluate({
       model: JEV_MODEL,
       state,
-      questions: encounter.questions,
+      questions,
       maxRetries: 2,
       abortSignal: AbortSignal.timeout(15_000),
     });
@@ -28,7 +24,7 @@ export async function askJev(
       | undefined;
     return {
       ...base,
-      answers: normalizeAnswers(result.answers, encounter.questions, typesafe?.confidence ?? {}),
+      answers: normalizeAnswers(result.answers, questions, typesafe?.confidence ?? {}),
       latencyMs: Math.round(performance.now() - started),
       usage: {
         inputTokens: result.usage.inputTokens,
@@ -37,10 +33,10 @@ export async function askJev(
       source: "jev",
     };
   } catch (error) {
-    console.error(`[jev] ${encounterId} failed, using fallback:`, error);
+    console.error(`[jev] ${spec.encounterId} failed, using fallback:`, error);
     return {
       ...base,
-      answers: fallbackAnswers(encounterId, state),
+      answers: fallbackAnswers(questions, state),
       latencyMs: Math.round(performance.now() - started),
       source: "fallback",
       error: error instanceof Error ? error.message : String(error),

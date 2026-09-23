@@ -53,6 +53,7 @@ export type CombatState = {
   enemyHeals: number;
   turn: number;
   lastPlayerAction: PlayerAction | "none";
+  lastEnemyAction: string;
 };
 
 export const PLAYER_ACTION_TEXT: Record<PlayerAction | "none", string> = {
@@ -70,6 +71,7 @@ export function startCombat(enemy: Enemy, s: GameState): CombatState {
     enemyHeals: enemy.heals,
     turn: 1,
     lastPlayerAction: "none",
+    lastEnemyAction: "none yet, the fight just started",
   };
 }
 
@@ -116,7 +118,7 @@ export function resolveTurn(
 ): TurnResult {
   const log: string[] = [];
   let game = s;
-  let combat: CombatState = { ...c, turn: c.turn + 1, lastPlayerAction: action };
+  let combat: CombatState = { ...c, turn: c.turn + 1, lastPlayerAction: action, lastEnemyAction: npc.choice };
   let heroHit = false;
   let enemyHit = false;
   const name = enemy.name;

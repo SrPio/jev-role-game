@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { sfx } from "@/lib/audio/chiptune";
 import type { EncounterId } from "@/lib/jev/encounters";
 import type { JevDecision, JevState } from "@/lib/jev/types";
@@ -9,6 +9,7 @@ import {
   resolveTurn,
   startCombat,
   type CombatOutcome,
+  type CombatState,
   type Enemy,
   type PlayerAction,
 } from "@/lib/story/combat";
@@ -24,6 +25,8 @@ type Props = {
   decide: (encounterId: EncounterId, state: JevState) => Promise<JevDecision>;
   onHit: (who: "hero" | "npc") => void;
   onEnd: (outcome: CombatOutcome, game: GameState) => void;
+  /** Jev mode: Jev picks the hero's action each turn. */
+  autoPick?: (enemy: Enemy, combat: CombatState, game: GameState) => Promise<PlayerAction>;
 };
 
 const ACTIONS: { id: PlayerAction; label: string }[] = [
@@ -57,7 +60,7 @@ export function HpBar({ label, hp, max, color }: { label: string; hp: number; ma
   );
 }
 
-export default function CombatView({ enemy, game, setGame, decide, onHit, onEnd }: Props) {
+export default function CombatView({ enemy, game, setGame, decide, onHit, onEnd, autoPick }: Props) {
   const [combat, setCombat] = useState(() => startCombat(enemy, game));
   const [log, setLog] = useState<string[]>(() =>
     game.firstStrike > 0
@@ -65,11 +68,16 @@ export default function CombatView({ enemy, game, setGame, decide, onHit, onEnd 
       : [`¡${enemy.name} se prepara para luchar!`],
   );
   const [busy, setBusy] = useState(false);
+  const [picked, setPicked] = useState<number | undefined>(undefined);
   const [outcome, setOutcome] = useState<{ result: CombatOutcome; game: GameState } | null>(null);
 
-  const act = async (action: PlayerAction) => {
+  const runTurn = async (pick: () => PlayerAction | Promise<PlayerAction>) => {
     if (busy || outcome) return;
     setBusy(true);
+    setPicked(undefined);
+    let action = await pick();
+    if (action === "potion" && game.potions === 0) action = "defend";
+    setPicked(ACTIONS.findIndex((a) => a.id === action));
     const decision = await decide(enemy.encounter, combatJevState(enemy, combat, game));
     const npc = choiceOf(decision, "action");
     const r = resolveTurn(enemy, combat, game, action, npc);
@@ -87,11 +95,22 @@ export default function CombatView({ enemy, game, setGame, decide, onHit, onEnd 
     }
     setBusy(false);
   };
+  const runTurnRef = useRef(runTurn);
+  useEffect(() => {
+    runTurnRef.current = runTurn;
+  });
+
+  // Jev mode: Jev plays the hero's turn as soon as the menu is free.
+  useEffect(() => {
+    if (!autoPick || busy || outcome) return;
+    const id = setTimeout(() => void runTurnRef.current(() => autoPick(enemy, combat, game)), 700);
+    return () => clearTimeout(id);
+  }, [autoPick, busy, outcome, enemy, combat, game]);
 
   return (
     <div className="space-y-3">
       <div className="pixel-box flex gap-4 p-3">
-        <HpBar label="TU" hp={game.playerHealth} max={game.playerMaxHealth} color="#00e436" />
+        <HpBar label={autoPick ? "HEROE (JEV)" : "TU"} hp={game.playerHealth} max={game.playerMaxHealth} color="#00e436" />
         <HpBar label={enemy.name.toUpperCase()} hp={combat.enemyHp} max={combat.enemyMaxHp} color="#ff004d" />
       </div>
       <div className="pixel-box min-h-[92px] space-y-1 p-3 text-[10px] leading-[1.7]">
@@ -105,16 +124,28 @@ export default function CombatView({ enemy, game, setGame, decide, onHit, onEnd 
         <DialogBox
           lines={[{ text: OUTCOME_TEXT[outcome.result] }]}
           onDone={() => onEnd(outcome.result, outcome.game)}
+          autoAdvance={!!autoPick}
         />
       ) : (
         <ChoiceMenu
-          prompt={{ text: busy ? `Jev decide el turno de ${enemy.name}...` : "Tu turno:" }}
-          disabled={busy}
+          prompt={{
+            text: autoPick
+              ? !busy
+                ? "Turno del héroe:"
+                : picked === undefined
+                  ? "Jev elige la acción del héroe..."
+                  : `Jev decide el turno de ${enemy.name}...`
+              : busy
+                ? `Jev decide el turno de ${enemy.name}...`
+                : "Tu turno:",
+          }}
+          disabled={busy || !!autoPick}
+          highlight={autoPick ? picked : undefined}
           options={ACTIONS.map((a) => ({
             label: a.id === "potion" ? `${a.label} (${game.potions})` : a.label,
             disabled: a.id === "potion" && game.potions === 0,
           }))}
-          onPick={(i) => void act(ACTIONS[i].id)}
+          onPick={(i) => void runTurn(() => ACTIONS[i].id)}
         />
       )}
     </div>

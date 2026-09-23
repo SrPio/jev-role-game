@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { ENCOUNTER_IDS } from "@/lib/jev/encounters";
+import { ENCOUNTER_IDS, encounterSpec } from "@/lib/jev/encounters";
 import { askJev } from "@/lib/jev/server";
 
 const MAX_STATE_BYTES = 4_000;
@@ -27,6 +27,6 @@ export async function POST(request: Request) {
     return Response.json({ error: "Estado demasiado grande" }, { status: 413 });
   }
 
-  const decision = await askJev(parsed.data.encounterId, parsed.data.state);
+  const decision = await askJev(encounterSpec(parsed.data.encounterId), parsed.data.state);
   return Response.json(decision);
 }
