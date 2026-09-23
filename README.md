@@ -1,36 +1,35 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Crónicas de Eldmoor
 
-## Getting Started
+RPG pixel art 8-bit donde los NPC **toman decisiones con Jev** (TypeSafe) vía Vercel AI Gateway.
+Jev no genera diálogo: recibe un estado tipado y devuelve `choice` + `probabilities` + `confidence`,
+y el juego ejecuta esa decisión. 5 capítulos, combates por turnos y 4 finales.
 
-First, run the development server:
+## Arranque
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+pnpm install
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Crea `.env.local` con tu key del AI Gateway (o usa `pnpm dlx vercel ai-gateway setup` / `vercel env pull`):
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+```
+AI_GATEWAY_API_KEY=vck_...
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+```bash
+pnpm dev
+```
 
-## Learn More
+Abre http://localhost:3000. Añade `?debug=1` para saltar a cualquier nodo y sobrescribir el estado.
 
-To learn more about Next.js, take a look at the following resources:
+## Cómo se usa Jev
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+- `lib/jev/encounters.ts` — todas las preguntas (choice / boolean / score) por encuentro.
+- `app/api/decide/route.ts` — único punto que llama a Jev; el cliente solo envía `{ encounterId, state }`.
+- `lib/jev/server.ts` — `experimental_evaluate({ model: "typesafe-ai/jev", state, questions })`.
+  La confianza viene en `providerMetadata.typesafe.confidence`.
+- `lib/story/story.ts` — la historia como datos; cada nodo `jev` construye el estado y resuelve la decisión.
+- Confianza < 0.55 → el NPC **duda**: te da un golpe inicial, pega más flojo y no llega a huir.
+- Si el Gateway falla, un fallback local mantiene el juego en marcha (marcado "OFFLINE" en el panel).
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Controles: ↑↓ / 1-4 elegir · ENTER avanzar · J panel de Jev · M sonido.
