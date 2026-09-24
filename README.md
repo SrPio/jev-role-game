@@ -4,6 +4,22 @@ RPG pixel art 8-bit donde los NPC **toman decisiones con Jev** (TypeSafe) vía V
 Jev no genera diálogo: recibe un estado tipado y devuelve `choice` + `probabilities` + `confidence`,
 y el juego ejecuta esa decisión. 5 capítulos, combates por turnos y 4 finales.
 
+![Pantalla de título](docs/screenshots/titulo.png)
+
+## Capturas
+
+**Grul decide en vivo.** El panel *Cerebro de Jev* muestra el estado que recibe Jev, la probabilidad de cada opción y su confianza.
+
+![Grul decide dejar pasar al héroe](docs/screenshots/decision-grul.png)
+
+**Combate por turnos.** Cada turno del enemigo lo elige Jev; con confianza baja (DUDA) el NPC titubea y pega más flojo.
+
+![Combate contra Kael](docs/screenshots/combate-kael.png)
+
+| Modo Jev: Jev juega al héroe | La Torre de Morvath | Final: El Héroe de Eldmoor |
+| --- | --- | --- |
+| ![Modo Jev](docs/screenshots/modo-jev.png) | ![Torre de Morvath](docs/screenshots/torre-morvath.png) | ![Final del héroe](docs/screenshots/final-heroe.png) |
+
 ## Arranque
 
 ```bash
