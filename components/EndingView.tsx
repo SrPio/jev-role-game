@@ -47,7 +47,7 @@ export default function EndingView({ ending, game, decisions, discovered, onRest
       </div>
 
       <div>
-        <div className="mb-2 text-[9px] text-[#ff77a8]">LO QUE DECIDIO JEV</div>
+        <div className="mb-2 text-[9px] text-[#ff77a8]">LO QUE DECIDIO {engine.toUpperCase()}</div>
         <ul className="space-y-1 text-[9px] leading-[1.8]">
           {story.map((d) => {
             const enc = d;

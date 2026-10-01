@@ -1,0 +1,297 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="-2 -300 3038 5714" width="1519" font-family="Helvetica, Arial, sans-serif">
+<defs><marker id="ah" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="#495057"/></marker></defs>
+<rect x="-2" y="-300" width="3038" height="5714" fill="#fff"/>
+<line x1="1300" y1="51" x2="1300" y2="120" stroke="#495057" stroke-width="2"/><polygon points="1300,120 1305.451856792321,107.10514608395961 1294.548143207679,107.10514608395961" fill="#495057"/>
+<line x1="1300" y1="217" x2="1300" y2="290" stroke="#495057" stroke-width="2"/><polygon points="1300,290 1305.451856792321,277.1051460839596 1294.548143207679,277.1051460839596" fill="#495057"/>
+<line x1="1087" y1="364" x2="266" y2="450" stroke="#495057" stroke-width="2"/><polygon points="266,450 279.3926616980284,454.0788003925373 278.2567095661832,443.2344201571312" fill="#495057"/>
+<line x1="1140" y1="364" x2="1227" y2="450" stroke="#495057" stroke-width="2"/><polygon points="1227,450 1221.662106514383,437.05755459211025 1213.9967117503058,444.8120818534441" fill="#495057"/>
+<line x1="1087" y1="364" x2="707" y2="450" stroke="#495057" stroke-width="2"/><polygon points="707,450 720.7801989813978,452.4710556515554 718.3733839090737,441.8362913784958" fill="#495057"/>
+<line x1="1513" y1="364" x2="1832.5" y2="450" stroke="#495057" stroke-width="2"/><polygon points="1832.5,450 1821.4653804229724,441.383900488604 1818.6312950412948,451.91285722634746" fill="#495057"/>
+<line x1="1140" y1="501" x2="1140" y2="610" stroke="#495057" stroke-width="2"/><polygon points="1140,610 1145.451856792321,597.1051460839597 1134.548143207679,597.1051460839597" fill="#495057"/>
+<line x1="1247" y1="684" x2="1140" y2="960" stroke="#495057" stroke-width="2"/><polygon points="1140,960 1149.7443030667514,949.9477088311521 1139.5778490270495,946.0063661418474" fill="#495057"/>
+<line x1="1271" y1="647" x2="1870" y2="635.5" stroke="#495057" stroke-width="2"/><polygon points="1870,635.5 1857.0028727913625,630.2966660377703 1857.2121709607138,641.1983706848526" fill="#495057"/>
+<line x1="1960" y1="524" x2="1960" y2="610" stroke="#495057" stroke-width="2"/><polygon points="1960,610 1965.451856792321,597.1051460839597 1954.548143207679,597.1051460839597" fill="#495057"/>
+<line x1="1894" y1="661" x2="1586" y2="770" stroke="#495057" stroke-width="2"/><polygon points="1586,770 1599.9749262168345,770.837518497726 1596.337223853485,760.5585063150505" fill="#495057"/>
+<line x1="1960" y1="661" x2="1960" y2="770" stroke="#495057" stroke-width="2"/><polygon points="1960,770 1965.451856792321,757.1051460839597 1954.548143207679,757.1051460839597" fill="#495057"/>
+<line x1="2026" y1="661" x2="2323" y2="770" stroke="#495057" stroke-width="2"/><polygon points="2323,770 2312.7729909620552,760.439231927413 2309.016298976162,770.6753559623705" fill="#495057"/>
+<line x1="2026" y1="661" x2="2768" y2="770" stroke="#495057" stroke-width="2"/><polygon points="2768,770 2756.0344427157806,762.7318889057705 2754.4496921962264,773.5198236352117" fill="#495057"/>
+<line x1="266" y1="501" x2="1014" y2="960" stroke="#495057" stroke-width="2"/><polygon points="1014,960 1005.8608324554519,948.6090407918483 1000.1580133940571,957.9025237067141" fill="#495057"/>
+<line x1="707" y1="524" x2="1014" y2="960" stroke="#495057" stroke-width="2"/><polygon points="1014,960 1011.033774086781,946.3178399427668 1002.1184296511025,952.5953875155955" fill="#495057"/>
+<line x1="1454" y1="844" x2="1520" y2="960" stroke="#495057" stroke-width="2"/><polygon points="1520,960 1518.3617387891766,946.0961839696754 1508.8846253066563,951.4883347442128" fill="#495057"/>
+<line x1="1894" y1="821" x2="1586" y2="960" stroke="#495057" stroke-width="2"/><polygon points="1586,960 1599.995990537218,959.6649643569599 1595.510760652036,949.7264693595782" fill="#495057"/>
+<line x1="2323" y1="844" x2="1586" y2="960" stroke="#495057" stroke-width="2"/><polygon points="1586,960 1599.5856973885222,963.3806547394697 1597.8903797903306,952.6095420682007" fill="#495057"/>
+<line x1="1300" y1="1177" x2="1300" y2="1250" stroke="#495057" stroke-width="2"/><polygon points="1300,1250 1305.451856792321,1237.1051460839597 1294.548143207679,1237.1051460839597" fill="#495057"/>
+<line x1="1077" y1="1347" x2="737" y2="1430" stroke="#495057" stroke-width="2"/><polygon points="737,1430 750.8199189149892,1432.2382674512048 748.2340650198907,1421.6456129411627" fill="#495057"/>
+<line x1="737" y1="1504" x2="1014" y2="1610" stroke="#495057" stroke-width="2"/><polygon points="1014,1610 1003.9052955131752,1600.299642206409 1000.0083409080152,1610.4831933915916" fill="#495057"/>
+<line x1="1140" y1="1347" x2="1267.5" y2="1430" stroke="#495057" stroke-width="2"/><polygon points="1267.5,1430 1259.667582581692,1418.395981843112 1253.718889130505,1427.5340350362005" fill="#495057"/>
+<line x1="1267.5" y1="1504" x2="1140" y2="1610" stroke="#495057" stroke-width="2"/><polygon points="1140,1610 1153.4009964927327,1605.9486677497684 1146.4303163024633,1597.5641231812842" fill="#495057"/>
+<line x1="1523" y1="1347" x2="1573" y2="1430" stroke="#495057" stroke-width="2"/><polygon points="1573,1430 1571.0160492592963,1416.141286515031 1561.6761356774637,1421.7677404799904" fill="#495057"/>
+<line x1="1573" y1="1504" x2="1586" y2="1610" stroke="#495057" stroke-width="2"/><polygon points="1586,1610 1589.8416294127119,1596.5373894264378 1579.0190032923088,1597.8646926298836" fill="#495057"/>
+<line x1="1523" y1="1347" x2="2054" y2="1430" stroke="#495057" stroke-width="2"/><polygon points="2054,1430 2042.1017936250641,1422.6221490216026 2040.4178934522827,1433.3950525366267" fill="#495057"/>
+<line x1="2054" y1="1504" x2="1586" y2="1610" stroke="#495057" stroke-width="2"/><polygon points="1586,1610 1599.7806217334949,1612.4686969514964 1597.3719864154423,1601.8343447925477" fill="#495057"/>
+<line x1="1300" y1="1011" x2="1300" y2="1080" stroke="#495057" stroke-width="2"/><polygon points="1300,1080 1305.451856792321,1067.1051460839597 1294.548143207679,1067.1051460839597" fill="#495057"/>
+<line x1="1300" y1="1661" x2="1300" y2="1730" stroke="#495057" stroke-width="2"/><polygon points="1300,1730 1305.451856792321,1717.1051460839597 1294.548143207679,1717.1051460839597" fill="#495057"/>
+<line x1="1300" y1="1827" x2="1300" y2="1900" stroke="#495057" stroke-width="2"/><polygon points="1300,1900 1305.451856792321,1887.1051460839597 1294.548143207679,1887.1051460839597" fill="#495057"/>
+<line x1="1067" y1="1974" x2="306" y2="2060" stroke="#495057" stroke-width="2"/><polygon points="306,2060 319.4255067581347,2063.9693536359564 318.20108064246557,2053.1346062635816" fill="#495057"/>
+<line x1="1067" y1="1974" x2="746" y2="2060" stroke="#495057" stroke-width="2"/><polygon points="746,2060 759.8664512480921,2061.9291266895375 757.0447204002376,2051.3968522458013" fill="#495057"/>
+<line x1="1120" y1="1974" x2="1202" y2="2060" stroke="#495057" stroke-width="2"/><polygon points="1202,2060 1197.0472928328995,2046.9053181895492 1189.1558659321313,2054.429701978654" fill="#495057"/>
+<line x1="1533" y1="1974" x2="1832.5" y2="2060" stroke="#495057" stroke-width="2"/><polygon points="1832.5,2060 1821.6106561809647,2051.201011922338 1818.601313409627,2061.681223085311" fill="#495057"/>
+<line x1="1960" y1="2134" x2="1960" y2="2220" stroke="#495057" stroke-width="2"/><polygon points="1960,2220 1965.451856792321,2207.1051460839594 1954.548143207679,2207.1051460839594" fill="#495057"/>
+<line x1="1894" y1="2271" x2="1597" y2="2380" stroke="#495057" stroke-width="2"/><polygon points="1597,2380 1610.9837010238382,2380.6753559623703 1607.2270090379445,2370.439231927413" fill="#495057"/>
+<line x1="1960" y1="2271" x2="1960" y2="2380" stroke="#495057" stroke-width="2"/><polygon points="1960,2380 1965.451856792321,2367.1051460839594 1954.548143207679,2367.1051460839594" fill="#495057"/>
+<line x1="2026" y1="2271" x2="2323" y2="2380" stroke="#495057" stroke-width="2"/><polygon points="2323,2380 2312.7729909620552,2370.439231927413 2309.016298976162,2380.6753559623703" fill="#495057"/>
+<line x1="2026" y1="2271" x2="2768" y2="2380" stroke="#495057" stroke-width="2"/><polygon points="2768,2380 2756.0344427157806,2372.7318889057706 2754.4496921962264,2383.5198236352117" fill="#495057"/>
+<line x1="306" y1="2134" x2="1014" y2="2570" stroke="#495057" stroke-width="2"/><polygon points="1014,2570 1005.8788881504108,2558.596161070654 1000.1613535714291,2567.8805979557897" fill="#495057"/>
+<line x1="746" y1="2134" x2="1014" y2="2570" stroke="#495057" stroke-width="2"/><polygon points="1014,2570 1011.8920458954021,2556.15960515401 1002.6028826891054,2561.869457767055" fill="#495057"/>
+<line x1="1202" y1="2134" x2="1120" y2="2570" stroke="#495057" stroke-width="2"/><polygon points="1120,2570 1127.7413141427346,2558.335007272034 1117.0254719187021,2556.319642450083" fill="#495057"/>
+<line x1="1443" y1="2454" x2="1520" y2="2570" stroke="#495057" stroke-width="2"/><polygon points="1520,2570 1517.4108432262503,2556.2415020005474 1508.3263747626406,2562.2717095151847" fill="#495057"/>
+<line x1="1894" y1="2431" x2="1586" y2="2570" stroke="#495057" stroke-width="2"/><polygon points="1586,2570 1599.995990537218,2569.66496435696 1595.510760652036,2559.726469359578" fill="#495057"/>
+<line x1="2323" y1="2454" x2="1586" y2="2570" stroke="#495057" stroke-width="2"/><polygon points="1586,2570 1599.5856973885222,2573.3806547394697 1597.8903797903306,2562.6095420682004" fill="#495057"/>
+<line x1="1300" y1="2621" x2="1300" y2="2690" stroke="#495057" stroke-width="2"/><polygon points="1300,2690 1305.451856792321,2677.1051460839594 1294.548143207679,2677.1051460839594" fill="#495057"/>
+<line x1="1300" y1="2787" x2="1300" y2="2860" stroke="#495057" stroke-width="2"/><polygon points="1300,2860 1305.451856792321,2847.1051460839594 1294.548143207679,2847.1051460839594" fill="#495057"/>
+<line x1="1072" y1="2957" x2="382" y2="3040" stroke="#495057" stroke-width="2"/><polygon points="382,3040 395.45367160106287,3043.872818153587 394.151452961236,3033.0471451237013" fill="#495057"/>
+<line x1="382" y1="3091" x2="1082" y2="3200" stroke="#495057" stroke-width="2"/><polygon points="1082,3200 1070.0975132455474,3192.6290564335304 1068.4198663571735,3203.402935533179" fill="#495057"/>
+<line x1="1072" y1="2957" x2="817" y2="3040" stroke="#495057" stroke-width="2"/><polygon points="817,3040 830.9490686614109,3041.193098268897 827.5742860357841,3030.824790202212" fill="#495057"/>
+<line x1="817" y1="3114" x2="1082" y2="3200" stroke="#495057" stroke-width="2"/><polygon points="1082,3200 1071.4177355745808,3190.8339932560298 1068.0519746077116,3201.2052334446385" fill="#495057"/>
+<line x1="1180" y1="2957" x2="1272" y2="3040" stroke="#495057" stroke-width="2"/><polygon points="1272,3040 1266.077645946437,3027.3143497421597 1258.7737277162705,3035.4102591057176" fill="#495057"/>
+<line x1="1272" y1="3114" x2="1180" y2="3200" stroke="#495057" stroke-width="2"/><polygon points="1180,3200 1193.14302327332,3195.1770404068698 1185.697053055334,3187.2115838946056" fill="#495057"/>
+<line x1="1528" y1="2957" x2="1554" y2="3040" stroke="#495057" stroke-width="2"/><polygon points="1554,3040 1555.3479184215053,3026.0650397944964 1544.9427752280549,3029.3244822406377" fill="#495057"/>
+<line x1="1554" y1="3114" x2="1518" y2="3200" stroke="#495057" stroke-width="2"/><polygon points="1518,3200 1528.0082104053915,3190.210427768211 1517.9501780702196,3186.0000886511625" fill="#495057"/>
+<line x1="1082" y1="3274" x2="802.5" y2="3360" stroke="#495057" stroke-width="2"/><polygon points="802.5,3360 816.4279446259978,3361.418576221124 813.2213167609771,3350.997035659807" fill="#495057"/>
+<line x1="1300" y1="3274" x2="1300" y2="3540" stroke="#495057" stroke-width="2"/><polygon points="1300,3540 1305.451856792321,3527.1051460839594 1294.548143207679,3527.1051460839594" fill="#495057"/>
+<line x1="802.5" y1="3434" x2="1014" y2="3540" stroke="#495057" stroke-width="2"/><polygon points="1014,3540 1004.9147001569071,3529.348365066287 1000.0291954451492,3539.096329656257" fill="#495057"/>
+<line x1="1300" y1="3614" x2="1300" y2="3690" stroke="#495057" stroke-width="2"/><polygon points="1300,3690 1305.451856792321,3677.1051460839594 1294.548143207679,3677.1051460839594" fill="#495057"/>
+<line x1="1300" y1="3764" x2="1300" y2="3840" stroke="#495057" stroke-width="2"/><polygon points="1300,3840 1305.451856792321,3827.1051460839594 1294.548143207679,3827.1051460839594" fill="#495057"/>
+<line x1="1300" y1="3937" x2="1300" y2="4010" stroke="#495057" stroke-width="2"/><polygon points="1300,4010 1305.451856792321,3997.1051460839594 1294.548143207679,3997.1051460839594" fill="#495057"/>
+<line x1="1300" y1="4061" x2="1300" y2="4760" stroke="#495057" stroke-width="2"/><polygon points="1300,4760 1305.451856792321,4747.10514608396 1294.548143207679,4747.10514608396" fill="#495057"/>
+<line x1="1397" y1="4061" x2="1822" y2="4130" stroke="#495057" stroke-width="2"/><polygon points="1822,4130 1810.1454883384642,4122.552144384689 1808.3981175995907,4133.314935167607" fill="#495057"/>
+<line x1="1822" y1="4227" x2="1778" y2="4300" stroke="#495057" stroke-width="2"/><polygon points="1778,4300 1789.3258575149773,4291.770482909038 1779.9873067094316,4286.14176735501" fill="#495057"/>
+<line x1="2140" y1="4227" x2="2074" y2="4300" stroke="#495057" stroke-width="2"/><polygon points="2074,4300 2086.6919568555163,4294.091173451716 2078.6038387815024,4286.778628343703" fill="#495057"/>
+<line x1="2218" y1="4227" x2="2494" y2="4300" stroke="#495057" stroke-width="2"/><polygon points="2494,4300 2482.9278601111614,4291.432169569723 2480.1397805076617,4301.973402043227" fill="#495057"/>
+<line x1="1342" y1="4374" x2="1536" y2="4760" stroke="#495057" stroke-width="2"/><polygon points="1536,4760 1535.0806101270882,4746.030221109066 1525.3381489311053,4750.926691243834" fill="#495057"/>
+<line x1="2074" y1="4351" x2="1536" y2="4760" stroke="#495057" stroke-width="2"/><polygon points="1536,4760 1549.5647329667188,4756.536184251203 1542.9658511432629,4747.85599251277" fill="#495057"/>
+<line x1="2560" y1="4351" x2="2560" y2="4440" stroke="#495057" stroke-width="2"/><polygon points="2560,4440 2565.451856792321,4427.10514608396 2554.548143207679,4427.10514608396" fill="#495057"/>
+<line x1="2468" y1="4491" x2="2167" y2="4590" stroke="#495057" stroke-width="2"/><polygon points="2167,4590 2180.9526810981533,4591.150082681043 2177.5459453507497,4580.792229550048" fill="#495057"/>
+<line x1="2652" y1="4491" x2="2828" y2="4590" stroke="#495057" stroke-width="2"/><polygon points="2828,4590 2819.433994841287,4578.926447922148 2814.088326702682,4588.429857946335" fill="#495057"/>
+<line x1="1993" y1="4664" x2="1536" y2="4760" stroke="#495057" stroke-width="2"/><polygon points="1536,4760 1549.7402132098168,4762.68450013015 1547.4986412505236,4752.013683615599" fill="#495057"/>
+<line x1="1064" y1="4811" x2="553" y2="4930" stroke="#495057" stroke-width="2"/><polygon points="553,4930 566.7953317853719,4932.385124929958 564.3222841086006,4921.765567259116" fill="#495057"/>
+<line x1="1300" y1="4811" x2="1300" y2="5080" stroke="#495057" stroke-width="2"/><polygon points="1300,5080 1305.451856792321,5067.10514608396 1294.548143207679,5067.10514608396" fill="#495057"/>
+<line x1="1536" y1="4811" x2="2033" y2="5080" stroke="#495057" stroke-width="2"/><polygon points="2033,5080 2024.2547418276226,5069.067458689835 2019.064594858474,5078.656689335437" fill="#495057"/>
+<line x1="1064" y1="4811" x2="887" y2="5080" stroke="#495057" stroke-width="2"/><polygon points="887,5080 898.6423296674931,5072.2246440651625 889.5335902530065,5066.2311612534" fill="#495057"/>
+<line x1="553" y1="5004" x2="1107" y2="5080" stroke="#495057" stroke-width="2"/><polygon points="1107,5080 1094.9657654437121,5072.846175942599 1093.4838287819766,5083.6487142399865" fill="#495057"/>
+<line x1="260" y1="5004" x2="320" y2="5300" stroke="#495057" stroke-width="2"/><polygon points="320,5300 322.78146727299014,5286.279087500851 312.0950867569583,5288.445245713561" fill="#495057"/>
+<line x1="1107" y1="5154" x2="1016" y2="5300" stroke="#495057" stroke-width="2"/><polygon points="1016,5300 1027.447501374939,5291.940551366826 1018.1940564468819,5286.172993226735" fill="#495057"/>
+<line x1="1300" y1="5154" x2="1300" y2="5300" stroke="#495057" stroke-width="2"/><polygon points="1300,5300 1305.451856792321,5287.10514608396 1294.548143207679,5287.10514608396" fill="#495057"/>
+<line x1="1493" y1="5154" x2="2054" y2="5300" stroke="#495057" stroke-width="2"/><polygon points="2054,5300 2042.8939339206306,5291.476192385989 2040.1477239384835,5302.0284101941015" fill="#495057"/>
+<line x1="2207" y1="5154" x2="2120" y2="5300" stroke="#495057" stroke-width="2"/><polygon points="2120,5300 2131.284242830774,5291.713513184942 2121.9174459011624,5286.131928713187" fill="#495057"/>
+<line x1="840" y1="5154" x2="780" y2="5300" stroke="#495057" stroke-width="2"/><polygon points="780,5300 789.9441364250762,5290.1453487753515 779.8588524863219,5286.000711540247" fill="#495057"/>
+<rect x="920" y="-260" width="760" height="51" rx="14" fill="#343a40" stroke="#343a40" stroke-width="2"/>
+<text x="1300" y="-228.06" font-size="18" text-anchor="middle" fill="#ffffff">CRÓNICAS DE ELDMOOR · mapa de decisiones y finales</text>
+<rect x="38" y="-150" width="444" height="51" rx="14" fill="#fff3bf" stroke="#e67700" stroke-width="2"/>
+<text x="260" y="-118.06" font-size="18" text-anchor="middle" fill="#1e1e1e">Decides tú (o el motor en Modo Jev/Laya)</text>
+<rect x="543" y="-150" width="434" height="51" rx="14" fill="#ffdeeb" stroke="#c2255c" stroke-width="2"/>
+<text x="760" y="-118.06" font-size="18" text-anchor="middle" fill="#1e1e1e">Decide el NPC con el motor (Jev o Laya)</text>
+<rect x="1149" y="-150" width="222" height="51" rx="14" fill="#ffe8cc" stroke="#d9480f" stroke-width="2"/>
+<text x="1260" y="-118.06" font-size="18" text-anchor="middle" fill="#1e1e1e">Combate por turnos</text>
+<rect x="1649" y="-150" width="222" height="51" rx="14" fill="#f8f9fa" stroke="#868e96" stroke-width="2"/>
+<text x="1760" y="-118.06" font-size="18" text-anchor="middle" fill="#1e1e1e">Resultado / efecto</text>
+<rect x="2139" y="-150" width="242" height="51" rx="14" fill="#f1f3f5" stroke="#495057" stroke-width="2" stroke-dasharray="8 6"/>
+<text x="2260" y="-118.06" font-size="18" text-anchor="middle" fill="#1e1e1e">Condición del estado</text>
+<rect x="2573.5" y="-150" width="373" height="74" rx="14" fill="#f8f9fa" stroke="#868e96" stroke-width="2"/>
+<text x="2760" y="-118.06" font-size="18" text-anchor="middle" fill="#1e1e1e">Si el NPC DUDA al atacar:</text>
+<text x="2760" y="-95.06" font-size="18" text-anchor="middle" fill="#1e1e1e">golpeas primero (−15 HP al rival)</text>
+<rect x="1078" y="0" width="444" height="51" rx="14" fill="#d0ebff" stroke="#1864ab" stroke-width="2"/>
+<text x="1300" y="31.94" font-size="18" text-anchor="middle" fill="#1e1e1e">PRÓLOGO → CAPÍTULO I · El Puente de Grul</text>
+<rect x="1022.5" y="120" width="555" height="97" rx="14" fill="#fff3bf" stroke="#e67700" stroke-width="2"/>
+<text x="1300" y="151.94" font-size="18" text-anchor="middle" fill="#1e1e1e">TÚ ELIGES</text>
+<text x="1300" y="174.94" font-size="18" text-anchor="middle" fill="#1e1e1e">Pagar el peaje (10 oro) · Intimidarlo con la espada</text>
+<text x="1300" y="197.94" font-size="18" text-anchor="middle" fill="#1e1e1e">· Cruzar a escondidas por las rocas</text>
+<rect x="1063" y="290" width="474" height="74" rx="14" fill="#ffdeeb" stroke="#c2255c" stroke-width="2"/>
+<text x="1300" y="321.94" font-size="18" text-anchor="middle" fill="#1e1e1e">GRUL DECIDE</text>
+<text x="1300" y="344.94" font-size="18" text-anchor="middle" fill="#1e1e1e">dejar pasar · pedir más oro · huir · atacar</text>
+<rect x="110" y="450" width="180" height="51" rx="14" fill="#f8f9fa" stroke="#868e96" stroke-width="2"/>
+<text x="200" y="481.94" font-size="18" text-anchor="middle" fill="#1e1e1e">Te deja pasar</text>
+<rect x="1029" y="450" width="222" height="51" rx="14" fill="#f8f9fa" stroke="#868e96" stroke-width="2"/>
+<text x="1140" y="481.94" font-size="18" text-anchor="middle" fill="#1e1e1e">Pide 10 de oro más</text>
+<rect x="549" y="450" width="182" height="74" rx="14" fill="#f8f9fa" stroke="#868e96" stroke-width="2"/>
+<text x="640" y="481.94" font-size="18" text-anchor="middle" fill="#1e1e1e">Huye río abajo</text>
+<text x="640" y="504.94" font-size="18" text-anchor="middle" fill="#1e1e1e">+15 oro</text>
+<rect x="1808.5" y="450" width="303" height="74" rx="14" fill="#f8f9fa" stroke="#868e96" stroke-width="2"/>
+<text x="1960" y="481.94" font-size="18" text-anchor="middle" fill="#1e1e1e">Ataca</text>
+<text x="1960" y="504.94" font-size="18" text-anchor="middle" fill="#1e1e1e">(si duda: golpeas primero)</text>
+<rect x="1009" y="610" width="262" height="74" rx="14" fill="#fff3bf" stroke="#e67700" stroke-width="2"/>
+<text x="1140" y="641.94" font-size="18" text-anchor="middle" fill="#1e1e1e">TÚ ELIGES</text>
+<text x="1140" y="664.94" font-size="18" text-anchor="middle" fill="#1e1e1e">Pagar 10 más · Negarte</text>
+<rect x="1870" y="610" width="180" height="51" rx="14" fill="#ffe8cc" stroke="#d9480f" stroke-width="2"/>
+<text x="1960" y="641.94" font-size="18" text-anchor="middle" fill="#1e1e1e">COMBATE: GRUL</text>
+<rect x="1430" y="770" width="180" height="74" rx="14" fill="#f8f9fa" stroke="#868e96" stroke-width="2"/>
+<text x="1520" y="801.94" font-size="18" text-anchor="middle" fill="#1e1e1e">Ganas</text>
+<text x="1520" y="824.94" font-size="18" text-anchor="middle" fill="#1e1e1e">+20 oro</text>
+<rect x="1870" y="770" width="180" height="51" rx="14" fill="#f8f9fa" stroke="#868e96" stroke-width="2"/>
+<text x="1960" y="801.94" font-size="18" text-anchor="middle" fill="#1e1e1e">Grul huye</text>
+<rect x="2299" y="770" width="202" height="74" rx="14" fill="#f8f9fa" stroke="#868e96" stroke-width="2"/>
+<text x="2400" y="801.94" font-size="18" text-anchor="middle" fill="#1e1e1e">Huyes a nado</text>
+<text x="2400" y="824.94" font-size="18" text-anchor="middle" fill="#1e1e1e">−5 oro, −1 honor</text>
+<rect x="2744" y="770" width="192" height="74" rx="14" fill="#ffe3e3" stroke="#c92a2a" stroke-width="4"/>
+<text x="2840" y="801.94" font-size="18" text-anchor="middle" fill="#1e1e1e">Pierdes →</text>
+<text x="2840" y="824.94" font-size="18" text-anchor="middle" fill="#1e1e1e">FINAL: LA CAÍDA</text>
+<rect x="990" y="960" width="620" height="51" rx="14" fill="#d0ebff" stroke="#1864ab" stroke-width="2"/>
+<text x="1300" y="991.94" font-size="18" text-anchor="middle" fill="#1e1e1e">CAPÍTULO II · La Posada del Cuervo</text>
+<rect x="997.5" y="1080" width="605" height="97" rx="14" fill="#fff3bf" stroke="#e67700" stroke-width="2"/>
+<text x="1300" y="1111.94" font-size="18" text-anchor="middle" fill="#1e1e1e">TÚ ELIGES (para que Sera te guíe)</text>
+<text x="1300" y="1134.94" font-size="18" text-anchor="middle" fill="#1e1e1e">Ofrecerle oro (hasta 20) · Contarle tu misión (+1 honor)</text>
+<text x="1300" y="1157.94" font-size="18" text-anchor="middle" fill="#1e1e1e">· Amenazarla (−2 honor)</text>
+<rect x="1053" y="1250" width="494" height="97" rx="14" fill="#ffdeeb" stroke="#c2255c" stroke-width="2"/>
+<text x="1300" y="1281.94" font-size="18" text-anchor="middle" fill="#1e1e1e">SERA DECIDE</text>
+<text x="1300" y="1304.94" font-size="18" text-anchor="middle" fill="#1e1e1e">unirse · unirse como espía · robar · rechazar</text>
+<text x="1300" y="1327.94" font-size="18" text-anchor="middle" fill="#1e1e1e">+ ¿confía en ti? (probabilidad)</text>
+<rect x="519" y="1430" width="242" height="74" rx="14" fill="#f8f9fa" stroke="#868e96" stroke-width="2"/>
+<text x="640" y="1461.94" font-size="18" text-anchor="middle" fill="#1e1e1e">Se une (leal)</text>
+<text x="640" y="1484.94" font-size="18" text-anchor="middle" fill="#1e1e1e">Sera es tu compañera</text>
+<rect x="988.5" y="1430" width="303" height="74" rx="14" fill="#f8f9fa" stroke="#868e96" stroke-width="2"/>
+<text x="1140" y="1461.94" font-size="18" text-anchor="middle" fill="#1e1e1e">Se une como espía</text>
+<text x="1140" y="1484.94" font-size="18" text-anchor="middle" fill="#1e1e1e">Sera compañera… y traidora</text>
+<rect x="1549" y="1430" width="182" height="74" rx="14" fill="#f8f9fa" stroke="#868e96" stroke-width="2"/>
+<text x="1640" y="1461.94" font-size="18" text-anchor="middle" fill="#1e1e1e">Te roba y huye</text>
+<text x="1640" y="1484.94" font-size="18" text-anchor="middle" fill="#1e1e1e">oro = 0</text>
+<rect x="2030" y="1430" width="180" height="74" rx="14" fill="#f8f9fa" stroke="#868e96" stroke-width="2"/>
+<text x="2120" y="1461.94" font-size="18" text-anchor="middle" fill="#1e1e1e">Rechaza</text>
+<text x="2120" y="1484.94" font-size="18" text-anchor="middle" fill="#1e1e1e">sigues solo</text>
+<rect x="990" y="1610" width="620" height="51" rx="14" fill="#d0ebff" stroke="#1864ab" stroke-width="2"/>
+<text x="1300" y="1641.94" font-size="18" text-anchor="middle" fill="#1e1e1e">CAPÍTULO III · El Bosque Susurrante</text>
+<rect x="962" y="1730" width="676" height="97" rx="14" fill="#fff3bf" stroke="#e67700" stroke-width="2"/>
+<text x="1300" y="1761.94" font-size="18" text-anchor="middle" fill="#1e1e1e">TÚ ELIGES (Kael y sus bandidos te rodean)</text>
+<text x="1300" y="1784.94" font-size="18" text-anchor="middle" fill="#1e1e1e">Combatir · Proponer un trato · Hablarle de tu misión (+1 honor)</text>
+<text x="1300" y="1807.94" font-size="18" text-anchor="middle" fill="#1e1e1e">· Huir entre los árboles (−1 honor)</text>
+<rect x="1043" y="1900" width="514" height="74" rx="14" fill="#ffdeeb" stroke="#c2255c" stroke-width="2"/>
+<text x="1300" y="1931.94" font-size="18" text-anchor="middle" fill="#1e1e1e">KAEL DECIDE</text>
+<text x="1300" y="1954.94" font-size="18" text-anchor="middle" fill="#1e1e1e">atacar · cobrar peaje · retirarse · unirse a ti</text>
+<rect x="150" y="2060" width="180" height="74" rx="14" fill="#f8f9fa" stroke="#868e96" stroke-width="2"/>
+<text x="240" y="2091.94" font-size="18" text-anchor="middle" fill="#1e1e1e">Cobra peaje</text>
+<text x="240" y="2114.94" font-size="18" text-anchor="middle" fill="#1e1e1e">−½ de tu oro</text>
+<rect x="590" y="2060" width="180" height="74" rx="14" fill="#f8f9fa" stroke="#868e96" stroke-width="2"/>
+<text x="680" y="2091.94" font-size="18" text-anchor="middle" fill="#1e1e1e">Se retira</text>
+<text x="680" y="2114.94" font-size="18" text-anchor="middle" fill="#1e1e1e">+1 poción</text>
+<rect x="1014" y="2060" width="212" height="74" rx="14" fill="#f8f9fa" stroke="#868e96" stroke-width="2"/>
+<text x="1120" y="2091.94" font-size="18" text-anchor="middle" fill="#1e1e1e">Se une a ti</text>
+<text x="1120" y="2114.94" font-size="18" text-anchor="middle" fill="#1e1e1e">Kael es tu aliado</text>
+<rect x="1808.5" y="2060" width="303" height="74" rx="14" fill="#f8f9fa" stroke="#868e96" stroke-width="2"/>
+<text x="1960" y="2091.94" font-size="18" text-anchor="middle" fill="#1e1e1e">Ataca</text>
+<text x="1960" y="2114.94" font-size="18" text-anchor="middle" fill="#1e1e1e">(si duda: golpeas primero)</text>
+<rect x="1870" y="2220" width="180" height="51" rx="14" fill="#ffe8cc" stroke="#d9480f" stroke-width="2"/>
+<text x="1960" y="2251.94" font-size="18" text-anchor="middle" fill="#1e1e1e">COMBATE: KAEL</text>
+<rect x="1419" y="2380" width="202" height="74" rx="14" fill="#f8f9fa" stroke="#868e96" stroke-width="2"/>
+<text x="1520" y="2411.94" font-size="18" text-anchor="middle" fill="#1e1e1e">Ganas</text>
+<text x="1520" y="2434.94" font-size="18" text-anchor="middle" fill="#1e1e1e">escudo, +1 honor</text>
+<rect x="1870" y="2380" width="180" height="51" rx="14" fill="#f8f9fa" stroke="#868e96" stroke-width="2"/>
+<text x="1960" y="2411.94" font-size="18" text-anchor="middle" fill="#1e1e1e">Kael huye</text>
+<rect x="2299" y="2380" width="202" height="74" rx="14" fill="#f8f9fa" stroke="#868e96" stroke-width="2"/>
+<text x="2400" y="2411.94" font-size="18" text-anchor="middle" fill="#1e1e1e">Huyes</text>
+<text x="2400" y="2434.94" font-size="18" text-anchor="middle" fill="#1e1e1e">−½ oro, −1 honor</text>
+<rect x="2744" y="2380" width="192" height="74" rx="14" fill="#ffe3e3" stroke="#c92a2a" stroke-width="4"/>
+<text x="2840" y="2411.94" font-size="18" text-anchor="middle" fill="#1e1e1e">Pierdes →</text>
+<text x="2840" y="2434.94" font-size="18" text-anchor="middle" fill="#1e1e1e">FINAL: LA CAÍDA</text>
+<rect x="990" y="2570" width="620" height="51" rx="14" fill="#d0ebff" stroke="#1864ab" stroke-width="2"/>
+<text x="1300" y="2601.94" font-size="18" text-anchor="middle" fill="#1e1e1e">CAPÍTULO IV · La Aldea en Llamas</text>
+<rect x="977.5" y="2690" width="645" height="97" rx="14" fill="#fff3bf" stroke="#e67700" stroke-width="2"/>
+<text x="1300" y="2721.94" font-size="18" text-anchor="middle" fill="#1e1e1e">TÚ ELIGES (no hay tiempo para ambas)</text>
+<text x="1300" y="2744.94" font-size="18" text-anchor="middle" fill="#1e1e1e">Salvar a los aldeanos (−10 HP, +3 honor)</text>
+<text x="1300" y="2767.94" font-size="18" text-anchor="middle" fill="#1e1e1e">· Perseguir al ladrón del mapa (consigues el mapa, −1 honor)</text>
+<rect x="1048" y="2860" width="504" height="97" rx="14" fill="#ffdeeb" stroke="#c2255c" stroke-width="2"/>
+<text x="1300" y="2891.94" font-size="18" text-anchor="middle" fill="#1e1e1e">YSOLDE DECIDE</text>
+<text x="1300" y="2914.94" font-size="18" text-anchor="middle" fill="#1e1e1e">qué regalo darte · cuánto honor ve en ti (0–4)</text>
+<text x="1300" y="2937.94" font-size="18" text-anchor="middle" fill="#1e1e1e">· ¿advertirte sobre Sera? (probabilidad)</text>
+<rect x="194" y="3040" width="212" height="51" rx="14" fill="#f8f9fa" stroke="#868e96" stroke-width="2"/>
+<text x="300" y="3071.94" font-size="18" text-anchor="middle" fill="#1e1e1e">Bendice tu espada</text>
+<rect x="639" y="3040" width="202" height="74" rx="14" fill="#f8f9fa" stroke="#868e96" stroke-width="2"/>
+<text x="740" y="3071.94" font-size="18" text-anchor="middle" fill="#1e1e1e">Cura tus heridas</text>
+<text x="740" y="3094.94" font-size="18" text-anchor="middle" fill="#1e1e1e">HP al máximo</text>
+<rect x="1064" y="3040" width="232" height="74" rx="14" fill="#f8f9fa" stroke="#868e96" stroke-width="2"/>
+<text x="1180" y="3071.94" font-size="18" text-anchor="middle" fill="#1e1e1e">Revela la debilidad</text>
+<text x="1180" y="3094.94" font-size="18" text-anchor="middle" fill="#1e1e1e">de Morvath</text>
+<rect x="1530" y="3040" width="180" height="74" rx="14" fill="#f8f9fa" stroke="#868e96" stroke-width="2"/>
+<text x="1620" y="3071.94" font-size="18" text-anchor="middle" fill="#1e1e1e">Se niega</text>
+<text x="1620" y="3094.94" font-size="18" text-anchor="middle" fill="#1e1e1e">no te da nada</text>
+<rect x="1058" y="3200" width="484" height="74" rx="14" fill="#f1f3f5" stroke="#495057" stroke-width="2" stroke-dasharray="8 6"/>
+<text x="1300" y="3231.94" font-size="18" text-anchor="middle" fill="#1e1e1e">¿Viajas con Sera y Ysolde decide advertirte?</text>
+<text x="1300" y="3254.94" font-size="18" text-anchor="middle" fill="#1e1e1e">(P(advertir) > 0.5)</text>
+<rect x="453.5" y="3360" width="373" height="74" rx="14" fill="#fff3bf" stroke="#e67700" stroke-width="2"/>
+<text x="640" y="3391.94" font-size="18" text-anchor="middle" fill="#1e1e1e">TÚ ELIGES</text>
+<text x="640" y="3414.94" font-size="18" text-anchor="middle" fill="#1e1e1e">Despedir a Sera · Confiar en ella</text>
+<rect x="990" y="3540" width="620" height="74" rx="14" fill="#d0ebff" stroke="#1864ab" stroke-width="2"/>
+<text x="1300" y="3571.94" font-size="18" text-anchor="middle" fill="#1e1e1e">CAPÍTULO V · La Torre de Morvath</text>
+<text x="1300" y="3594.94" font-size="18" text-anchor="middle" fill="#1e1e1e">(con el mapa entras por un pasadizo secreto)</text>
+<rect x="1027.5" y="3690" width="545" height="74" rx="14" fill="#fff3bf" stroke="#e67700" stroke-width="2"/>
+<text x="1300" y="3721.94" font-size="18" text-anchor="middle" fill="#1e1e1e">TÚ ELIGES</text>
+<text x="1300" y="3744.94" font-size="18" text-anchor="middle" fill="#1e1e1e">Atacar sin dudar · Escuchar lo que tiene que decir</text>
+<rect x="1007.5" y="3840" width="585" height="97" rx="14" fill="#ffdeeb" stroke="#c2255c" stroke-width="2"/>
+<text x="1300" y="3871.94" font-size="18" text-anchor="middle" fill="#1e1e1e">MORVATH DECIDE</text>
+<text x="1300" y="3894.94" font-size="18" text-anchor="middle" fill="#1e1e1e">luchar · ofrecer pacto · huir con la corona · rendirse</text>
+<text x="1300" y="3917.94" font-size="18" text-anchor="middle" fill="#1e1e1e">(pesa espada bendita, debilidad, aliados, honor…)</text>
+<rect x="1179" y="4010" width="242" height="51" rx="14" fill="#f1f3f5" stroke="#495057" stroke-width="2" stroke-dasharray="8 6"/>
+<text x="1300" y="4041.94" font-size="18" text-anchor="middle" fill="#1e1e1e">¿Sera sigue contigo?</text>
+<rect x="1798" y="4130" width="444" height="97" rx="14" fill="#ffdeeb" stroke="#c2255c" stroke-width="2"/>
+<text x="2020" y="4161.94" font-size="18" text-anchor="middle" fill="#1e1e1e">SERA DECIDE</text>
+<text x="2020" y="4184.94" font-size="18" text-anchor="middle" fill="#1e1e1e">ayudarte · traicionarte · apartarse</text>
+<text x="2020" y="4207.94" font-size="18" text-anchor="middle" fill="#1e1e1e">(pesa si es espía y cuánto confía en ti)</text>
+<rect x="1318" y="4300" width="484" height="74" rx="14" fill="#f8f9fa" stroke="#868e96" stroke-width="2"/>
+<text x="1560" y="4331.94" font-size="18" text-anchor="middle" fill="#1e1e1e">Te ayuda: +20 de golpe inicial</text>
+<text x="1560" y="4354.94" font-size="18" text-anchor="middle" fill="#1e1e1e">(si Morvath huía, cierra el portal → luchar)</text>
+<rect x="2050" y="4300" width="180" height="51" rx="14" fill="#f8f9fa" stroke="#868e96" stroke-width="2"/>
+<text x="2140" y="4331.94" font-size="18" text-anchor="middle" fill="#1e1e1e">Se aparta</text>
+<rect x="2470" y="4300" width="180" height="51" rx="14" fill="#f8f9fa" stroke="#868e96" stroke-width="2"/>
+<text x="2560" y="4331.94" font-size="18" text-anchor="middle" fill="#1e1e1e">Te traiciona</text>
+<rect x="2444" y="4440" width="232" height="51" rx="14" fill="#f1f3f5" stroke="#495057" stroke-width="2" stroke-dasharray="8 6"/>
+<text x="2560" y="4471.94" font-size="18" text-anchor="middle" fill="#1e1e1e">¿Kael está contigo?</text>
+<rect x="1969" y="4590" width="222" height="74" rx="14" fill="#f8f9fa" stroke="#868e96" stroke-width="2"/>
+<text x="2080" y="4621.94" font-size="18" text-anchor="middle" fill="#1e1e1e">Kael la detiene</text>
+<text x="2080" y="4644.94" font-size="18" text-anchor="middle" fill="#1e1e1e">−20 HP, Sera fuera</text>
+<rect x="2804" y="4590" width="192" height="97" rx="14" fill="#ffe3e3" stroke="#c92a2a" stroke-width="4"/>
+<text x="2900" y="4621.94" font-size="18" text-anchor="middle" fill="#1e1e1e">Sin Kael →</text>
+<text x="2900" y="4644.94" font-size="18" text-anchor="middle" fill="#1e1e1e">FINAL: LA CAÍDA</text>
+<text x="2900" y="4667.94" font-size="18" text-anchor="middle" fill="#1e1e1e">(traicionado)</text>
+<rect x="1040" y="4760" width="520" height="51" rx="14" fill="#f1f3f5" stroke="#495057" stroke-width="2" stroke-dasharray="8 6"/>
+<text x="1300" y="4791.94" font-size="18" text-anchor="middle" fill="#1e1e1e">SEGÚN LO QUE DECIDIÓ MORVATH</text>
+<rect x="63" y="4930" width="514" height="74" rx="14" fill="#fff3bf" stroke="#e67700" stroke-width="2"/>
+<text x="320" y="4961.94" font-size="18" text-anchor="middle" fill="#1e1e1e">TÚ ELIGES</text>
+<text x="320" y="4984.94" font-size="18" text-anchor="middle" fill="#1e1e1e">Aceptar el pacto · Rechazar y luchar (+1 honor)</text>
+<rect x="1083" y="5080" width="434" height="74" rx="14" fill="#ffe8cc" stroke="#d9480f" stroke-width="2"/>
+<text x="1300" y="5111.94" font-size="18" text-anchor="middle" fill="#1e1e1e">COMBATE: MORVATH</text>
+<text x="1300" y="5134.94" font-size="18" text-anchor="middle" fill="#1e1e1e">(bendición, debilidad y aliados ayudan)</text>
+<rect x="2009" y="5080" width="222" height="74" rx="14" fill="#f8f9fa" stroke="#868e96" stroke-width="2"/>
+<text x="2120" y="5111.94" font-size="18" text-anchor="middle" fill="#1e1e1e">Huye por un portal</text>
+<text x="2120" y="5134.94" font-size="18" text-anchor="middle" fill="#1e1e1e">con la corona</text>
+<rect x="649" y="5080" width="262" height="74" rx="14" fill="#f8f9fa" stroke="#868e96" stroke-width="2"/>
+<text x="780" y="5111.94" font-size="18" text-anchor="middle" fill="#1e1e1e">Se rinde</text>
+<text x="780" y="5134.94" font-size="18" text-anchor="middle" fill="#1e1e1e">y te entrega la corona</text>
+<rect x="70" y="5300" width="380" height="74" rx="14" fill="#f3d9fa" stroke="#862e9c" stroke-width="4"/>
+<text x="260" y="5331.94" font-size="18" text-anchor="middle" fill="#1e1e1e">FINAL 2 · EL PACTO OSCURO</text>
+<text x="260" y="5354.94" font-size="18" text-anchor="middle" fill="#1e1e1e">reinas junto a Morvath; invierno eterno</text>
+<rect x="640" y="5300" width="400" height="74" rx="14" fill="#ffec99" stroke="#e67700" stroke-width="4"/>
+<text x="840" y="5331.94" font-size="18" text-anchor="middle" fill="#1e1e1e">FINAL 1 · EL HÉROE DE ELDMOOR</text>
+<text x="840" y="5354.94" font-size="18" text-anchor="middle" fill="#1e1e1e">devuelves la corona; vuelve la primavera</text>
+<rect x="2030" y="5300" width="380" height="74" rx="14" fill="#c5f6fa" stroke="#0b7285" stroke-width="4"/>
+<text x="2220" y="5331.94" font-size="18" text-anchor="middle" fill="#1e1e1e">FINAL 3 · EL EXILIADO</text>
+<text x="2220" y="5354.94" font-size="18" text-anchor="middle" fill="#1e1e1e">sobrevives, pero la corona se pierde</text>
+<rect x="1120" y="5300" width="360" height="74" rx="14" fill="#ffe3e3" stroke="#c92a2a" stroke-width="4"/>
+<text x="1300" y="5331.94" font-size="18" text-anchor="middle" fill="#1e1e1e">FINAL 4 · LA CAÍDA</text>
+<text x="1300" y="5354.94" font-size="18" text-anchor="middle" fill="#1e1e1e">mueres (o te traiciona Sera)</text>
+<rect x="1133.74" y="810" width="119.52000000000001" height="22" fill="#fff" opacity="0.92"/><text x="1193.5" y="827" font-size="16" text-anchor="middle" fill="#1e1e1e">Pagar 10 más</text>
+<rect x="1533.14" y="629.25" width="74.72" height="22" fill="#fff" opacity="0.92"/><text x="1570.5" y="646.25" font-size="16" text-anchor="middle" fill="#1e1e1e">Negarte</text>
+<rect x="927.29" y="3305" width="29.92" height="22" fill="#fff" opacity="0.92"/><text x="942.25" y="3322" font-size="16" text-anchor="middle" fill="#1e1e1e">sí</text>
+<rect x="1285.04" y="3395" width="29.92" height="22" fill="#fff" opacity="0.92"/><text x="1300" y="3412" font-size="16" text-anchor="middle" fill="#1e1e1e">no</text>
+<rect x="691.6899999999999" y="3475" width="433.12000000000006" height="22" fill="#fff" opacity="0.92"/><text x="908.25" y="3492" font-size="16" text-anchor="middle" fill="#1e1e1e">Despedirla (deja el grupo) / Confiar (se queda)</text>
+<rect x="1285.04" y="4398.5" width="29.92" height="22" fill="#fff" opacity="0.92"/><text x="1300" y="4415.5" font-size="16" text-anchor="middle" fill="#1e1e1e">no</text>
+<rect x="1594.54" y="4083.5" width="29.92" height="22" fill="#fff" opacity="0.92"/><text x="1609.5" y="4100.5" font-size="16" text-anchor="middle" fill="#1e1e1e">sí</text>
+<rect x="2302.54" y="4528.5" width="29.92" height="22" fill="#fff" opacity="0.92"/><text x="2317.5" y="4545.5" font-size="16" text-anchor="middle" fill="#1e1e1e">sí</text>
+<rect x="2725.04" y="4528.5" width="29.92" height="22" fill="#fff" opacity="0.92"/><text x="2740" y="4545.5" font-size="16" text-anchor="middle" fill="#1e1e1e">no</text>
+<rect x="744.26" y="4858.5" width="128.48000000000002" height="22" fill="#fff" opacity="0.92"/><text x="808.5" y="4875.5" font-size="16" text-anchor="middle" fill="#1e1e1e">Ofrecer pacto</text>
+<rect x="1267.12" y="4933.5" width="65.76" height="22" fill="#fff" opacity="0.92"/><text x="1300" y="4950.5" font-size="16" text-anchor="middle" fill="#1e1e1e">Luchar</text>
+<rect x="1697.86" y="4933.5" width="173.28000000000003" height="22" fill="#fff" opacity="0.92"/><text x="1784.5" y="4950.5" font-size="16" text-anchor="middle" fill="#1e1e1e">Huir con la corona</text>
+<rect x="933.66" y="4933.5" width="83.68" height="22" fill="#fff" opacity="0.92"/><text x="975.5" y="4950.5" font-size="16" text-anchor="middle" fill="#1e1e1e">Rendirse</text>
+<rect x="788.16" y="5030" width="83.68" height="22" fill="#fff" opacity="0.92"/><text x="830" y="5047" font-size="16" text-anchor="middle" fill="#1e1e1e">Rechazar</text>
+<rect x="252.64" y="5140" width="74.72" height="22" fill="#fff" opacity="0.92"/><text x="290" y="5157" font-size="16" text-anchor="middle" fill="#1e1e1e">Aceptar</text>
+<rect x="1033.1" y="5215" width="56.800000000000004" height="22" fill="#fff" opacity="0.92"/><text x="1061.5" y="5232" font-size="16" text-anchor="middle" fill="#1e1e1e">Ganas</text>
+<rect x="1262.64" y="5215" width="74.72" height="22" fill="#fff" opacity="0.92"/><text x="1300" y="5232" font-size="16" text-anchor="middle" fill="#1e1e1e">Pierdes</text>
+<rect x="1677.9" y="5215" width="191.20000000000002" height="22" fill="#fff" opacity="0.92"/><text x="1773.5" y="5232" font-size="16" text-anchor="middle" fill="#1e1e1e">Huyes / Morvath huye</text>
+</svg>

@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import {
-  HESITATION_THRESHOLD,
+  hesitationThreshold,
   PROVIDER_INFO,
   type Answer,
   type DecisionProvider,
@@ -29,12 +29,12 @@ function Bar({ value, color, marker }: { value: number; color: string; marker?: 
   );
 }
 
-function ConfidenceRow({ confidence }: { confidence: number }) {
-  const hesitant = confidence < HESITATION_THRESHOLD;
+function ConfidenceRow({ confidence, threshold }: { confidence: number; threshold: number }) {
+  const hesitant = confidence < threshold;
   return (
     <div className="mt-2 flex items-center gap-2 text-[8px]">
       <span className="w-20 shrink-0 text-[#c2c3c7]">CONFIANZA</span>
-      <Bar value={confidence} color={hesitant ? "#ffa300" : "#29adff"} marker={HESITATION_THRESHOLD} />
+      <Bar value={confidence} color={hesitant ? "#ffa300" : "#29adff"} marker={threshold} />
       <span className="w-10 text-right">{confidence.toFixed(2)}</span>
       <span className={`w-14 text-right ${hesitant ? "text-[#ffa300]" : "text-[#29adff]"}`}>
         {hesitant ? "DUDA" : "SEGURO"}
@@ -43,11 +43,12 @@ function ConfidenceRow({ confidence }: { confidence: number }) {
   );
 }
 
-function AnswerView({ answer, label, options, levels }: {
+function AnswerView({ answer, label, options, levels, threshold }: {
   answer: Answer;
   label: string;
   options?: Record<string, string>;
   levels?: string[];
+  threshold: number;
 }) {
   if (answer.type === "choice") {
     const sorted = Object.entries(answer.probabilities).sort((a, b) => b[1] - a[1]);
@@ -69,7 +70,7 @@ function AnswerView({ answer, label, options, levels }: {
             );
           })}
         </div>
-        <ConfidenceRow confidence={answer.confidence} />
+        <ConfidenceRow confidence={answer.confidence} threshold={threshold} />
       </div>
     );
   }
@@ -205,6 +206,7 @@ export default function JevBrainPanel({ decisions, thinking, provider }: Props) 
                 label={current.meta[id]?.label ?? id}
                 options={current.meta[id]?.options}
                 levels={current.meta[id]?.levels}
+                threshold={hesitationThreshold(current.source)}
               />
             ))}
           </div>

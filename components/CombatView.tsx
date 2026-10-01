@@ -91,7 +91,7 @@ export default function CombatView({
     setPicked(ACTIONS.findIndex((a) => a.id === action));
     const decision = await decide(enemy.encounter, combatJevState(enemy, combat, game));
     const npc = choiceOf(decision, "action");
-    const r = resolveTurn(enemy, combat, game, action, npc);
+    const r = resolveTurn(enemy, combat, game, action, npc, decision.source);
     setCombat(r.combat);
     setGame(r.game);
     setLog((prev) => [...prev.slice(-3), `— Turno ${combat.turn} —`, ...r.log].slice(-6));
@@ -121,7 +121,7 @@ export default function CombatView({
   return (
     <div className="space-y-3">
       <div className="pixel-box flex gap-4 p-3">
-        <HpBar label={autoPick ? "HEROE (JEV)" : "TU"} hp={game.playerHealth} max={game.playerMaxHealth} color="#00e436" />
+        <HpBar label={autoPick ? `HEROE (${engine.toUpperCase()})` : "TU"} hp={game.playerHealth} max={game.playerMaxHealth} color="#00e436" />
         <HpBar label={enemy.name.toUpperCase()} hp={combat.enemyHp} max={combat.enemyMaxHp} color="#ff004d" />
       </div>
       <div className="pixel-box min-h-[92px] space-y-1 p-3 text-[10px] leading-[1.7]">

@@ -10,7 +10,7 @@ const pixelFont = Press_Start_2P({
 
 export const metadata: Metadata = {
   title: "Crónicas de Eldmoor",
-  description: "RPG pixel art 8-bit donde los NPC toman decisiones con Jev.",
+  description: "RPG pixel art 8-bit donde los NPC toman decisiones con Jev o Laya.",
 };
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {

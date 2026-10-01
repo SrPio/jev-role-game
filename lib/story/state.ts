@@ -1,5 +1,5 @@
 import type { Answer, BooleanAnswer, ChoiceAnswer, JevDecision, ScoreAnswer } from "@/lib/jev/types";
-import { HESITATION_THRESHOLD } from "@/lib/jev/types";
+import { hesitationThreshold } from "@/lib/jev/types";
 import type { GameState } from "./types";
 
 export const INITIAL_STATE: GameState = {
@@ -51,14 +51,16 @@ export function allies(s: GameState): string[] {
 
 function answer<T extends Answer>(d: JevDecision, id: string, type: T["type"]): T {
   const a = d.answers[id];
-  if (!a || a.type !== type) throw new Error(`Jev answer "${id}" missing or not ${type}`);
+  if (!a || a.type !== type) throw new Error(`Decision answer "${id}" missing or not ${type}`);
   return a as T;
 }
 export const choiceOf = (d: JevDecision, id: string) => answer<ChoiceAnswer>(d, id, "choice");
 export const booleanOf = (d: JevDecision, id: string) => answer<BooleanAnswer>(d, id, "boolean");
 export const scoreOf = (d: JevDecision, id: string) => answer<ScoreAnswer>(d, id, "score");
 
-export const isHesitant = (a: { confidence: number }) => a.confidence < HESITATION_THRESHOLD;
+/** Whether an answer from decision `d` is below its engine's hesitation threshold. */
+export const isHesitant = (a: { confidence: number }, d: Pick<JevDecision, "source">) =>
+  a.confidence < hesitationThreshold(d.source);
 
 /** The main decision of a Jev call, used by the UI for moods and history. */
 export function primaryAnswer(d: JevDecision, primary: string): ChoiceAnswer | undefined {

@@ -21,6 +21,13 @@ y el juego ejecuta esa decisión. 5 capítulos, combates por turnos y 4 finales.
 | --- | --- | --- |
 | ![Modo Jev](docs/screenshots/modo-jev.png) | ![Torre de Morvath](docs/screenshots/torre-morvath.png) | ![Final del héroe](docs/screenshots/final-heroe.png) |
 
+## Mapa de decisiones
+
+[`docs/diagrams/decisiones.excalidraw`](docs/diagrams/decisiones.excalidraw) recoge cada elección del héroe,
+cada decisión de los NPC, los combates y cómo se llega a cada uno de los 4 finales. Se abre en
+[excalidraw.com](https://excalidraw.com) (menú → Abrir) y hay una vista previa en
+[`docs/diagrams/decisiones.svg`](docs/diagrams/decisiones.svg).
+
 ## Arranque
 
 ```bash
@@ -48,7 +55,7 @@ Abre http://localhost:3000. Añade `?debug=1` para saltar a cualquier nodo y sob
 - `lib/jev/server.ts` — `experimental_evaluate({ model: "typesafe-ai/jev", state, questions })`.
   La confianza viene en `providerMetadata.typesafe.confidence`.
 - `lib/story/story.ts` — la historia como datos; cada nodo `jev` construye el estado y resuelve la decisión.
-- Confianza < 0.55 → el NPC **duda**: te da un golpe inicial, pega más flojo y no llega a huir.
+- Confianza bajo el umbral del motor (Jev 0.55, Laya 0.05) → el NPC **duda**: te da un golpe inicial, pega más flojo y no llega a huir.
 - Si el Gateway falla, un fallback local mantiene el juego en marcha (marcado "OFFLINE" en el panel).
 
 ## Usar Laya
@@ -92,9 +99,10 @@ Detalles de la integración (`lib/jev/laya.ts`):
   `choice` y `score` se envían tal cual; las listas del estado se aplanan a texto.
 - La llamada se hace desde el servidor (rutas `/api/decide` y `/api/hero`), así que no hace falta CORS.
 - Si Laya no responde, se usa el mismo fallback local (panel: "OFFLINE · FALLBACK (LAYA)").
-- Ojo con la confianza: con los textos del juego Laya devuelve distribuciones bastante planas (confianza
-  0.05–0.5 en CPU), así que casi todas sus decisiones quedan por debajo de `HESITATION_THRESHOLD = 0.55`
-  y los personajes "dudan" mucho más que con Jev.
+- Umbral de duda por motor (`HESITATION_THRESHOLDS` en `lib/jev/types.ts`): Jev 0.55, Laya 0.05. Laya devuelve
+  distribuciones mucho más planas con los textos del juego (mediana de confianza ~0.17 en 162 decisiones
+  reales), así que con 0.55 dudaba en casi todo; con 0.05 duda en ~1 de cada 4 decisiones de NPC. Para
+  volver a medirlo con el servidor corriendo: `pnpm dlx tsx scripts/sample-confidence.ts laya`.
 
 ## Modo Jev
 

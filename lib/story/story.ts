@@ -47,7 +47,7 @@ export const NODES: Record<string, StoryNode> = {
       { text: "Hasta que el hechicero Morvath la robó... y un invierno sin fin cayó sobre estas tierras." },
       { text: "Tú, un viajero con una vieja espada, partes hacia su torre, en el lejano norte." },
       {
-        text: "Pero aquí nadie sigue un guion: cada personaje decide por sí mismo. Sus decisiones las toma Jev, en tiempo real.",
+        text: "Pero aquí nadie sigue un guion: cada personaje decide por sí mismo. Sus decisiones las toma {MOTOR}, en tiempo real.",
       },
     ],
     next: "ch1_title",
@@ -137,7 +137,7 @@ export const NODES: Record<string, StoryNode> = {
         default: {
           const lines: Line[] = [{ who: "Grul", text: "¡GRUL APLASTA!" }];
           let firstStrike = 0;
-          if (isHesitant(a)) {
+          if (isHesitant(a, d)) {
             lines.push(HESITATE_LINE("Grul"));
             firstStrike = 15;
           }
@@ -397,7 +397,7 @@ export const NODES: Record<string, StoryNode> = {
         default: {
           const lines: Line[] = [{ who: "Kael", text: "Que así sea. ¡A por él!" }];
           let firstStrike = 0;
-          if (isHesitant(a)) {
+          if (isHesitant(a, d)) {
             lines.push(HESITATE_LINE("Kael"));
             firstStrike = 15;
           }
@@ -659,10 +659,10 @@ export const NODES: Record<string, StoryNode> = {
         flee_with_crown: [{ who: "Morvath", text: "Hoy no, viajero." }, { text: "Morvath abre un portal de sombras." }],
         surrender: [{ who: "Morvath", text: "¡Basta! ¡Basta! Toma la corona... pero déjame vivir." }],
       }[a.choice] ?? [{ who: "Morvath", text: "..." }];
-      if (a.choice === "fight" && isHesitant(a)) lines.push(HESITATE_LINE("Morvath"));
+      if (a.choice === "fight" && isHesitant(a, d)) lines.push(HESITATE_LINE("Morvath"));
       const state = patch(s, {
         morvathChoice: a.choice,
-        firstStrike: a.choice === "fight" && isHesitant(a) ? 15 : 0,
+        firstStrike: a.choice === "fight" && isHesitant(a, d) ? 15 : 0,
       });
       return { state, lines, next: state.companion === "Sera" ? "ch5_sera_jev" : morvathRoute };
     },

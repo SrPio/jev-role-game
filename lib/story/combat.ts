@@ -1,5 +1,5 @@
 import type { EncounterId } from "@/lib/jev/encounters";
-import type { ChoiceAnswer, JevState } from "@/lib/jev/types";
+import type { ChoiceAnswer, JevDecision, JevState } from "@/lib/jev/types";
 import { allies, isHesitant, patch } from "./state";
 import type { EnemyId, GameState } from "./types";
 
@@ -115,6 +115,7 @@ export function resolveTurn(
   s: GameState,
   action: PlayerAction,
   npc: ChoiceAnswer,
+  source: JevDecision["source"],
 ): TurnResult {
   const log: string[] = [];
   let game = s;
@@ -123,7 +124,7 @@ export function resolveTurn(
   let enemyHit = false;
   const name = enemy.name;
   const enemyDefends = npc.choice === "defend";
-  const hesitant = isHesitant(npc);
+  const hesitant = isHesitant(npc, { source });
 
   // ── Player ──
   if (action === "potion") {

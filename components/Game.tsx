@@ -28,17 +28,22 @@ type Phase =
   | { t: "combat"; key: number; node: CombatNode }
   | { t: "ending"; ending: EndingId };
 
-/** "player": you are the hero. "jev": Jev plays the hero too, against Jev-driven NPCs. */
+/** "player": you are the hero. "jev": the decision engine (Jev or Laya) plays the hero too, against NPCs it also drives. */
 type GameMode = { kind: "player" } | { kind: "jev"; personality: HeroPersonality };
 type MoodTarget = NpcId | "hero";
 
-const MODE_OPTIONS: { label: string; mode: GameMode }[] = [
+/** Title menu entries; the "watch" modes are named after the engine that plays them. */
+const modeOptions = (engine: string): { label: string; mode: GameMode }[] => [
   { label: "Jugar: tú eres el héroe", mode: { kind: "player" } },
   ...(Object.keys(HERO_PERSONALITIES) as HeroPersonality[]).map((p) => ({
-    label: `Modo Jev: héroe ${HERO_PERSONALITIES[p].label}`,
+    label: `Modo ${engine}: héroe ${HERO_PERSONALITIES[p].label}`,
     mode: { kind: "jev", personality: p } as GameMode,
   })),
 ];
+
+/** Story text says `{MOTOR}` wherever it names the decision engine. */
+const withEngine = (lines: Line[], engine: string): Line[] =>
+  lines.map((l) => (l.text.includes("{MOTOR}") ? { ...l, text: l.text.replaceAll("{MOTOR}", engine) } : l));
 
 const ENDINGS_KEY = "eldmoor.endings";
 const PROVIDER_KEY = "eldmoor.provider";
@@ -120,6 +125,7 @@ export default function Game({ debug = false }: { debug?: boolean }) {
   const node = nodeId ? NODES[nodeId] : null;
   const jevMode = mode.kind === "jev";
   const engine = PROVIDER_INFO[provider].label;
+  const menuOptions = useMemo(() => modeOptions(engine), [engine]);
 
   const remember = (texts: string[]) => {
     recentRef.current = [...recentRef.current, ...texts].slice(-4);
@@ -169,7 +175,7 @@ export default function Game({ debug = false }: { debug?: boolean }) {
       setDecisions((prev) => [...prev, d]);
       setThinking(null);
       const primary = primaryAnswer(d, d.primary);
-      setMood({ target, mood: primary && isHesitant(primary) ? "hesitant" : "decided" });
+      setMood({ target, mood: primary && isHesitant(primary, d) ? "hesitant" : "decided" });
       sfx.decide();
       return d;
     },
@@ -210,7 +216,10 @@ export default function Game({ debug = false }: { debug?: boolean }) {
           break;
         case "say": {
           const s2 = n.effect ? n.effect(s) : s;
-          const lines = typeof n.lines === "function" ? n.lines(s2) : n.lines;
+          const lines = withEngine(
+            typeof n.lines === "function" ? n.lines(s2) : n.lines,
+            PROVIDER_INFO[providerRef.current].label,
+          );
           remember(lines.map(lineText));
           setGame(s2);
           setPhase({ t: "dialog", key, lines, next: n.next, state: s2 });
@@ -364,7 +373,7 @@ export default function Game({ debug = false }: { debug?: boolean }) {
           <h1 className="text-[12px] text-[#ffec27] sm:text-[14px]">CRONICAS DE ELDMOOR</h1>
           {mode.kind === "jev" && phase.t !== "title" ? (
             <span className="bg-[#ff77a8] px-2 py-1 text-[8px] text-black">
-              MODO JEV · HEROE {HERO_PERSONALITIES[mode.personality].label.toUpperCase()}
+              MODO {engine.toUpperCase()} · HEROE {HERO_PERSONALITIES[mode.personality].label.toUpperCase()}
             </span>
           ) : null}
           {phase.t !== "title" ? (
@@ -487,8 +496,8 @@ export default function Game({ debug = false }: { debug?: boolean }) {
               </div>
               <ChoiceMenu
                 prompt={{ text: "Elige un modo de juego:" }}
-                options={MODE_OPTIONS}
-                onPick={(i) => start(MODE_OPTIONS[i].mode)}
+                options={menuOptions}
+                onPick={(i) => start(menuOptions[i].mode)}
               />
               <div className="pixel-box space-y-3 p-4 text-[10px] leading-[1.9] text-[#c2c3c7]">
                 <p>
@@ -496,7 +505,7 @@ export default function Game({ debug = false }: { debug?: boolean }) {
                   actuar; <span className="text-[#ff77a8]">{engine}</span> decide qué hacen los demás.
                 </p>
                 <p>
-                  En el <span className="text-[#ff77a8]">Modo Jev</span> tú solo miras: {engine} juega al héroe con la
+                  En el <span className="text-[#ff77a8]">Modo {engine}</span> tú solo miras: {engine} juega al héroe con la
                   personalidad elegida, contra NPCs que también decide {engine}.
                 </p>
                 <p className="text-[9px] text-[#5f574f]">

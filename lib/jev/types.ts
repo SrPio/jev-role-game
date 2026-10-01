@@ -75,5 +75,14 @@ export type JevDecision = {
   error?: string;
 };
 
-/** Below this confidence an NPC "hesitates" — used as game logic, not decoration. */
-export const HESITATION_THRESHOLD = 0.55;
+/**
+ * Below this confidence an NPC "hesitates" — used as game logic, not decoration.
+ * Per engine: Laya's distributions over the game's states are much flatter than
+ * Jev's (median confidence ~0.17), so 0.05 makes it hesitate about as often
+ * (~1 in 4 NPC decisions). Re-measure with `scripts/sample-confidence.ts`.
+ */
+export const HESITATION_THRESHOLDS: Record<DecisionProvider, number> = { jev: 0.55, laya: 0.05 };
+
+/** The local fallback's random confidences were tuned against Jev's threshold. */
+export const hesitationThreshold = (source: JevDecision["source"]) =>
+  HESITATION_THRESHOLDS[source === "fallback" ? "jev" : source];
