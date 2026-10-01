@@ -2,7 +2,7 @@
 
 import { useEffect } from "react";
 import { isTypingTarget } from "@/lib/keys";
-import type { JevDecision } from "@/lib/jev/types";
+import { PROVIDER_INFO, type JevDecision } from "@/lib/jev/types";
 import { ENDINGS } from "@/lib/story/endings";
 import type { EndingId, GameState } from "@/lib/story/types";
 
@@ -20,6 +20,7 @@ export default function EndingView({ ending, game, decisions, discovered, onRest
   const e = ENDINGS[ending];
   const story = decisions.filter((d) => !d.encounterId.includes("combat"));
   const combatTurns = decisions.length - story.length;
+  const engine = PROVIDER_INFO[decisions[0]?.provider ?? "jev"].label;
 
   useEffect(() => {
     const onKey = (ev: KeyboardEvent) => {
@@ -62,7 +63,7 @@ export default function EndingView({ ending, game, decisions, discovered, onRest
             );
           })}
           {combatTurns > 0 ? (
-            <li className="text-[#c2c3c7]">+ {combatTurns} turnos de combate decididos por Jev</li>
+            <li className="text-[#c2c3c7]">+ {combatTurns} turnos de combate decididos por {engine}</li>
           ) : null}
         </ul>
       </div>

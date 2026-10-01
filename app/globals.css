@@ -52,6 +52,11 @@ body {
   color: #ffec27;
   border-color: #ffec27;
 }
+.pixel-btn[aria-pressed="true"] {
+  background: #29adff;
+  border-color: #29adff;
+  color: #000;
+}
 .pixel-btn:active {
   transform: translate(2px, 2px);
   box-shadow: 1px 1px 0 #5f574f;

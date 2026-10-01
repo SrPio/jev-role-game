@@ -67,7 +67,7 @@ export function heroChoiceSpec(
   return {
     spec: {
       encounterId: "hero_choice",
-      npc: "Héroe (Jev)",
+      npc: "Héroe",
       title: "Decisión del héroe",
       primary: "choice",
       questions: {

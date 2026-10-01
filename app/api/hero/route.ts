@@ -1,6 +1,7 @@
 import { z } from "zod";
 import { HERO_PERSONALITY_IDS, heroChoiceSpec } from "@/lib/jev/hero";
-import { askJev } from "@/lib/jev/server";
+import { askDecision, resolveProvider } from "@/lib/jev/server";
+import { DECISION_PROVIDERS } from "@/lib/jev/types";
 import { GameStateSchema } from "@/lib/story/schema";
 
 const Body = z.object({
@@ -8,6 +9,7 @@ const Body = z.object({
   game: GameStateSchema,
   personality: z.enum(HERO_PERSONALITY_IDS),
   recentEvents: z.array(z.string().max(300)).max(4),
+  provider: z.enum(DECISION_PROVIDERS).optional(),
 });
 
 /** Jev mode: Jev picks the hero's option for a story choice node. */
@@ -16,9 +18,9 @@ export async function POST(request: Request) {
   if (!parsed.success) {
     return Response.json({ error: "Solicitud inválida", issues: parsed.error.issues }, { status: 400 });
   }
-  const { nodeId, game, personality, recentEvents } = parsed.data;
+  const { nodeId, game, personality, recentEvents, provider } = parsed.data;
   const built = heroChoiceSpec(nodeId, game, personality, recentEvents);
   if (!built) return Response.json({ error: "El nodo no es una elección" }, { status: 400 });
 
-  return Response.json(await askJev(built.spec, built.state));
+  return Response.json(await askDecision(built.spec, built.state, resolveProvider(provider)));
 }

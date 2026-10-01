@@ -1,6 +1,7 @@
 import { z } from "zod";
 import { ENCOUNTER_IDS, encounterSpec } from "@/lib/jev/encounters";
-import { askJev } from "@/lib/jev/server";
+import { askDecision, resolveProvider } from "@/lib/jev/server";
+import { DECISION_PROVIDERS } from "@/lib/jev/types";
 
 const MAX_STATE_BYTES = 4_000;
 
@@ -16,6 +17,7 @@ const Body = z.object({
       z.array(z.string().max(80)).max(10),
     ]),
   ),
+  provider: z.enum(DECISION_PROVIDERS).optional(),
 });
 
 export async function POST(request: Request) {
@@ -27,6 +29,7 @@ export async function POST(request: Request) {
     return Response.json({ error: "Estado demasiado grande" }, { status: 413 });
   }
 
-  const decision = await askJev(encounterSpec(parsed.data.encounterId), parsed.data.state);
+  const { encounterId, state, provider } = parsed.data;
+  const decision = await askDecision(encounterSpec(encounterId), state, resolveProvider(provider));
   return Response.json(decision);
 }

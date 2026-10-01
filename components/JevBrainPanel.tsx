@@ -1,11 +1,19 @@
 "use client";
 
 import { useState } from "react";
-import { HESITATION_THRESHOLD, type Answer, type JevDecision, type JevValue } from "@/lib/jev/types";
+import {
+  HESITATION_THRESHOLD,
+  PROVIDER_INFO,
+  type Answer,
+  type DecisionProvider,
+  type JevDecision,
+  type JevValue,
+} from "@/lib/jev/types";
 
 type Props = {
   decisions: JevDecision[];
   thinking: { npc: string; title: string } | null;
+  provider: DecisionProvider;
 };
 
 const pct = (n: number) => `${Math.round(n * 100)}%`;
@@ -116,7 +124,8 @@ function JsonValue({ value }: { value: JevValue }) {
   );
 }
 
-export default function JevBrainPanel({ decisions, thinking }: Props) {
+export default function JevBrainPanel({ decisions, thinking, provider }: Props) {
+  const engine = PROVIDER_INFO[provider].label;
   const [selected, setSelected] = useState<string | null>(null);
   const latest = decisions.at(-1);
   const current = decisions.find((d) => d.id === selected) ?? latest;
@@ -124,7 +133,7 @@ export default function JevBrainPanel({ decisions, thinking }: Props) {
   return (
     <div className="pixel-box space-y-4 p-4">
       <div className="flex items-center justify-between">
-        <h2 className="text-[11px] text-[#ff77a8]">CEREBRO DE JEV</h2>
+        <h2 className="text-[11px] text-[#ff77a8]">CEREBRO DE {engine.toUpperCase()}</h2>
         <span className="text-[8px] text-[#5f574f]">[J] ocultar</span>
       </div>
 
@@ -136,7 +145,7 @@ export default function JevBrainPanel({ decisions, thinking }: Props) {
 
       {!current ? (
         <p className="text-[9px] leading-[1.9] text-[#c2c3c7]">
-          Aquí verás cada decisión de los NPC: el <span className="text-[#ffec27]">estado</span> que recibe Jev, la
+          Aquí verás cada decisión de los NPC: el <span className="text-[#ffec27]">estado</span> que recibe {engine}, la
           probabilidad de cada opción y su <span className="text-[#29adff]">confianza</span>. El juego ejecuta la
           opción elegida; si la confianza es baja, el NPC duda.
         </p>
@@ -144,10 +153,12 @@ export default function JevBrainPanel({ decisions, thinking }: Props) {
         <>
           <div className="flex flex-wrap items-center gap-2 text-[8px]">
             <span
-              className={`px-2 py-1 ${current.source === "jev" ? "bg-[#008751] text-[#fff1e8]" : "bg-[#ffa300] text-[#000]"}`}
+              className={`px-2 py-1 ${current.source === "fallback" ? "bg-[#ffa300] text-[#000]" : "bg-[#008751] text-[#fff1e8]"}`}
               title={current.error}
             >
-              {current.source === "jev" ? "JEV · EN VIVO" : "OFFLINE · FALLBACK"}
+              {current.source === "fallback"
+                ? `OFFLINE · FALLBACK (${PROVIDER_INFO[current.provider].label.toUpperCase()})`
+                : `${PROVIDER_INFO[current.source].label.toUpperCase()} · EN VIVO`}
             </span>
             <span className="text-[#c2c3c7]">{current.latencyMs} ms</span>
             {current.usage?.inputTokens ? (
@@ -156,9 +167,18 @@ export default function JevBrainPanel({ decisions, thinking }: Props) {
               </span>
             ) : null}
           </div>
+          {current.source === "fallback" && current.error ? (
+            <p className="break-words text-[8px] leading-[1.7] text-[#ffa300]">
+              {current.provider === "laya" && /fetch failed|ECONNREFUSED/i.test(current.error)
+                ? "No hay un laya-serve escuchando (LAYA_BASE_URL, por defecto localhost:8000)."
+                : current.error.slice(0, 160)}
+            </p>
+          ) : null}
           <div>
             <div className="text-[10px]">{current.title}</div>
-            <div className="mt-1 text-[8px] text-[#5f574f]">model: typesafe-ai/jev</div>
+            <div className="mt-1 text-[8px] text-[#5f574f]">
+              model: {PROVIDER_INFO[current.provider].model}
+            </div>
           </div>
 
           <details className="group" open>

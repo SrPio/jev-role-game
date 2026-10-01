@@ -291,7 +291,7 @@ export const ENCOUNTERS = {
   },
   // Jev mode: Jev also plays the hero's side of every fight.
   hero_combat: {
-    npc: "Héroe (Jev)",
+    npc: "Héroe",
     title: "Turno del héroe",
     primary: "action",
     questions: {

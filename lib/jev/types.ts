@@ -36,6 +36,14 @@ export type ScoreAnswer = {
 };
 export type Answer = ChoiceAnswer | BooleanAnswer | ScoreAnswer;
 
+/** Which decision engine answers: TypeSafe's hosted Jev, or a self-hosted Laya server. */
+export const DECISION_PROVIDERS = ["jev", "laya"] as const;
+export type DecisionProvider = (typeof DECISION_PROVIDERS)[number];
+export const PROVIDER_INFO: Record<DecisionProvider, { label: string; model: string }> = {
+  jev: { label: "Jev", model: "typesafe-ai/jev" },
+  laya: { label: "Laya", model: "laya (self-hosted)" },
+};
+
 export type JevValue = string | number | boolean | null | string[];
 export type JevState = Record<string, JevValue>;
 
@@ -61,7 +69,9 @@ export type JevDecision = {
   answers: Record<string, Answer>;
   latencyMs: number;
   usage?: { inputTokens?: number; outputTokens?: number };
-  source: "jev" | "fallback";
+  /** The engine that was asked; `source` says whether it actually answered. */
+  provider: DecisionProvider;
+  source: DecisionProvider | "fallback";
   error?: string;
 };
 

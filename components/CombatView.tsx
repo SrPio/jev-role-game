@@ -27,6 +27,8 @@ type Props = {
   onEnd: (outcome: CombatOutcome, game: GameState) => void;
   /** Jev mode: Jev picks the hero's action each turn. */
   autoPick?: (enemy: Enemy, combat: CombatState, game: GameState) => Promise<PlayerAction>;
+  /** Name of the decision engine, for the prompts. */
+  engine?: string;
 };
 
 const ACTIONS: { id: PlayerAction; label: string }[] = [
@@ -60,7 +62,16 @@ export function HpBar({ label, hp, max, color }: { label: string; hp: number; ma
   );
 }
 
-export default function CombatView({ enemy, game, setGame, decide, onHit, onEnd, autoPick }: Props) {
+export default function CombatView({
+  enemy,
+  game,
+  setGame,
+  decide,
+  onHit,
+  onEnd,
+  autoPick,
+  engine = "Jev",
+}: Props) {
   const [combat, setCombat] = useState(() => startCombat(enemy, game));
   const [log, setLog] = useState<string[]>(() =>
     game.firstStrike > 0
@@ -133,10 +144,10 @@ export default function CombatView({ enemy, game, setGame, decide, onHit, onEnd,
               ? !busy
                 ? "Turno del héroe:"
                 : picked === undefined
-                  ? "Jev elige la acción del héroe..."
-                  : `Jev decide el turno de ${enemy.name}...`
+                  ? `${engine} elige la acción del héroe...`
+                  : `${engine} decide el turno de ${enemy.name}...`
               : busy
-                ? `Jev decide el turno de ${enemy.name}...`
+                ? `${engine} decide el turno de ${enemy.name}...`
                 : "Tu turno:",
           }}
           disabled={busy || !!autoPick}

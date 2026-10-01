@@ -2,10 +2,10 @@
 
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { setMuted as setAudioMuted, sfx } from "@/lib/audio/chiptune";
-import { requestDecision, requestHeroChoice } from "@/lib/jev/client";
+import { fetchDefaultProvider, requestDecision, requestHeroChoice } from "@/lib/jev/client";
 import { getEncounter, type EncounterId } from "@/lib/jev/encounters";
 import { HERO_PERSONALITIES, heroCombatState, type HeroPersonality } from "@/lib/jev/hero";
-import type { JevDecision, JevState } from "@/lib/jev/types";
+import { DECISION_PROVIDERS, PROVIDER_INFO, type DecisionProvider, type JevDecision, type JevState } from "@/lib/jev/types";
 import { isTypingTarget } from "@/lib/keys";
 import type { SpriteId } from "@/lib/pixel/sprites";
 import { ENEMIES, type CombatOutcome, type CombatState, type Enemy, type PlayerAction } from "@/lib/story/combat";
@@ -41,10 +41,11 @@ const MODE_OPTIONS: { label: string; mode: GameMode }[] = [
 ];
 
 const ENDINGS_KEY = "eldmoor.endings";
+const PROVIDER_KEY = "eldmoor.provider";
 const MIN_THINKING_MS = 650;
 /** Jev mode: how long the hero's pick stays highlighted before the story moves on. */
 const PICK_PAUSE_MS = 1300;
-const HERO_LABEL = { npc: "Héroe (Jev)", title: "Decisión del héroe" };
+const heroName = (p: DecisionProvider) => `Héroe (${PROVIDER_INFO[p].label})`;
 
 const resolveRef = (ref: Ref, s: GameState) => (typeof ref === "function" ? ref(s) : ref);
 const wait = (ms: number) => new Promise((r) => setTimeout(r, ms));
@@ -101,6 +102,7 @@ export default function Game({ debug = false }: { debug?: boolean }) {
   const [game, setGame] = useState<GameState>(INITIAL_STATE);
   const [phase, setPhase] = useState<Phase>({ t: "title" });
   const [mode, setMode] = useState<GameMode>({ kind: "player" });
+  const [provider, setProvider] = useState<DecisionProvider>("jev");
   const [decisions, setDecisions] = useState<JevDecision[]>([]);
   const [thinking, setThinking] = useState<{ npc: string; title: string } | null>(null);
   const [mood, setMood] = useState<{ target: MoodTarget | null; mood: Mood }>({ target: null, mood: "idle" });
@@ -111,15 +113,47 @@ export default function Game({ debug = false }: { debug?: boolean }) {
   const keyRef = useRef(0);
   const runRef = useRef(0);
   const modeRef = useRef<GameMode>(mode);
+  const providerRef = useRef<DecisionProvider>(provider);
   /** Last lines of story text, given to Jev when it plays the hero. */
   const recentRef = useRef<string[]>([]);
 
   const node = nodeId ? NODES[nodeId] : null;
   const jevMode = mode.kind === "jev";
+  const engine = PROVIDER_INFO[provider].label;
 
   const remember = (texts: string[]) => {
     recentRef.current = [...recentRef.current, ...texts].slice(-4);
   };
+
+  const pickProvider = useCallback((p: DecisionProvider, persist = true) => {
+    providerRef.current = p;
+    setProvider(p);
+    if (!persist) return;
+    try {
+      localStorage.setItem(PROVIDER_KEY, p);
+    } catch {
+      /* storage unavailable: the choice lasts until reload */
+    }
+  }, []);
+
+  // Start on the last engine picked here, else the server's DECISION_PROVIDER.
+  useEffect(() => {
+    let saved: string | null = null;
+    try {
+      saved = localStorage.getItem(PROVIDER_KEY);
+    } catch {
+      /* storage unavailable */
+    }
+    const initial: Promise<DecisionProvider> =
+      saved === "jev" || saved === "laya" ? Promise.resolve(saved) : fetchDefaultProvider();
+    let cancelled = false;
+    void initial.then((p) => {
+      if (!cancelled) pickProvider(p, false);
+    });
+    return () => {
+      cancelled = true;
+    };
+  }, [pickProvider]);
 
   // ── Jev ────────────────────────────────────────────────────
   const think = useCallback(
@@ -145,7 +179,9 @@ export default function Game({ debug = false }: { debug?: boolean }) {
   const decide = useCallback(
     (encounterId: EncounterId, state: JevState, target: MoodTarget) => {
       const enc = getEncounter(encounterId);
-      return think(target, { npc: enc.npc, title: enc.title }, () => requestDecision(encounterId, state));
+      return think(target, { npc: enc.npc, title: enc.title }, () =>
+        requestDecision(encounterId, state, providerRef.current),
+      );
     },
     [think],
   );
@@ -185,7 +221,10 @@ export default function Game({ debug = false }: { debug?: boolean }) {
           setPhase({ t: "choose", key, prompt: n.prompt, options });
           const m = modeRef.current;
           if (m.kind !== "jev") break;
-          void think("hero", HERO_LABEL, () => requestHeroChoice(id, s, m.personality, recentRef.current)).then(
+          const p = providerRef.current;
+          void think("hero", { npc: heroName(p), title: "Decisión del héroe" }, () =>
+            requestHeroChoice(id, s, m.personality, recentRef.current, p),
+          ).then(
             (d) => {
               if (run !== runRef.current) return;
               const a = primaryAnswer(d, d.primary);
@@ -264,12 +303,13 @@ export default function Game({ debug = false }: { debug?: boolean }) {
     return () => clearTimeout(id);
   }, [phase, advance]);
 
-  // Global keys: chapter skip, panel, mute.
+  // Global keys: chapter skip, panel, mute, engine (title only).
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
       if (isTypingTarget(e)) return;
       const k = e.key.toLowerCase();
       if (k === "j") setPanelOpen((o) => !o);
+      else if (k === "e" && phase.t === "title") pickProvider(providerRef.current === "jev" ? "laya" : "jev");
       else if (k === "m") setMuted((m) => !m);
       else if ((e.key === "Enter" || e.key === " ") && !e.repeat && phase.t === "chapter") {
         e.preventDefault();
@@ -278,7 +318,7 @@ export default function Game({ debug = false }: { debug?: boolean }) {
     };
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
-  }, [phase, advance]);
+  }, [phase, advance, pickProvider]);
 
   useEffect(() => setAudioMuted(muted), [muted]);
 
@@ -303,8 +343,9 @@ export default function Game({ debug = false }: { debug?: boolean }) {
     if (mode.kind !== "jev") return undefined;
     const { personality } = mode;
     return async (enemy: Enemy, c: CombatState, s: GameState): Promise<PlayerAction> => {
-      const d = await think("hero", { npc: "Héroe (Jev)", title: `Turno del héroe vs ${enemy.name}` }, () =>
-        requestDecision("hero_combat", heroCombatState(enemy, c, s, personality)),
+      const p = providerRef.current;
+      const d = await think("hero", { npc: heroName(p), title: `Turno del héroe vs ${enemy.name}` }, () =>
+        requestDecision("hero_combat", heroCombatState(enemy, c, s, personality), p),
       );
       return (primaryAnswer(d, d.primary)?.choice ?? "attack") as PlayerAction;
     };
@@ -326,6 +367,11 @@ export default function Game({ debug = false }: { debug?: boolean }) {
               MODO JEV · HEROE {HERO_PERSONALITIES[mode.personality].label.toUpperCase()}
             </span>
           ) : null}
+          {phase.t !== "title" ? (
+            <span className="border border-[#29adff] px-2 py-1 text-[8px] text-[#29adff]">
+              MOTOR: {engine.toUpperCase()}
+            </span>
+          ) : null}
         </div>
         <div className="flex items-center gap-2 text-[9px]">
           {phase.t !== "title" ? (
@@ -337,7 +383,7 @@ export default function Game({ debug = false }: { debug?: boolean }) {
             {muted ? "SONIDO: NO" : "SONIDO: SI"} [M]
           </button>
           <button type="button" className="pixel-btn" onClick={() => setPanelOpen((o) => !o)}>
-            JEV {panelOpen ? "▼" : "▶"} [J]
+            {engine.toUpperCase()} {panelOpen ? "▼" : "▶"} [J]
           </button>
         </div>
       </header>
@@ -376,7 +422,7 @@ export default function Game({ debug = false }: { debug?: boolean }) {
                 jevMode
                   ? {
                       ...phase.prompt,
-                      text: `${phase.prompt.text} ${phase.picked === undefined ? "(Jev está decidiendo...)" : "(Jev decidió)"}`,
+                      text: `${phase.prompt.text} ${phase.picked === undefined ? `(${engine} está decidiendo...)` : `(${engine} decidió)`}`,
                     }
                   : phase.prompt
               }
@@ -393,7 +439,7 @@ export default function Game({ debug = false }: { debug?: boolean }) {
             <div className="pixel-box min-h-[132px] p-4 text-[11px] leading-[1.9]">
               <p className="text-[#c2c3c7]">{phase.text}</p>
               <p className="mt-3 text-[9px] text-[#29adff]">
-                <span className="blink">●</span> Jev está evaluando el estado...
+                <span className="blink">●</span> {engine} está evaluando el estado...
               </p>
             </div>
           ) : null}
@@ -407,6 +453,7 @@ export default function Game({ debug = false }: { debug?: boolean }) {
               onHit={onHit}
               onEnd={onCombatEnd}
               autoPick={heroCombatPick}
+              engine={engine}
             />
           ) : null}
           {phase.t === "ending" ? (
@@ -420,6 +467,24 @@ export default function Game({ debug = false }: { debug?: boolean }) {
           ) : null}
           {phase.t === "title" ? (
             <>
+              <div className="pixel-box flex flex-wrap items-center gap-2 p-3 text-[9px]">
+                <span className="text-[#c2c3c7]">MOTOR DE DECISIONES [E]:</span>
+                {DECISION_PROVIDERS.map((p) => (
+                  <button
+                    key={p}
+                    type="button"
+                    aria-pressed={provider === p}
+                    className="pixel-btn"
+                    onClick={() => pickProvider(p)}
+                  >
+                    {provider === p ? "▶ " : ""}
+                    {PROVIDER_INFO[p].label.toUpperCase()}
+                  </button>
+                ))}
+                <span className="text-[8px] text-[#5f574f]">
+                  {provider === "laya" ? "open source, local (laya-serve)" : "TypeSafe vía AI Gateway"}
+                </span>
+              </div>
               <ChoiceMenu
                 prompt={{ text: "Elige un modo de juego:" }}
                 options={MODE_OPTIONS}
@@ -428,14 +493,14 @@ export default function Game({ debug = false }: { debug?: boolean }) {
               <div className="pixel-box space-y-3 p-4 text-[10px] leading-[1.9] text-[#c2c3c7]">
                 <p>
                   Una aventura de 5 capítulos y <span className="text-[#ffec27]">4 finales</span>. Tú eliges cómo
-                  actuar; <span className="text-[#ff77a8]">Jev</span> decide qué hacen los demás.
+                  actuar; <span className="text-[#ff77a8]">{engine}</span> decide qué hacen los demás.
                 </p>
                 <p>
-                  En el <span className="text-[#ff77a8]">Modo Jev</span> tú solo miras: Jev juega al héroe con la
-                  personalidad elegida, contra NPCs que también decide Jev.
+                  En el <span className="text-[#ff77a8]">Modo Jev</span> tú solo miras: {engine} juega al héroe con la
+                  personalidad elegida, contra NPCs que también decide {engine}.
                 </p>
                 <p className="text-[9px] text-[#5f574f]">
-                  Controles: ↑↓ / 1-4 elegir · ENTER avanzar · J panel de Jev · M sonido
+                  Controles: ↑↓ / 1-4 elegir · ENTER avanzar · E motor · J panel de decisiones · M sonido
                 </p>
               </div>
             </>
@@ -455,7 +520,7 @@ export default function Game({ debug = false }: { debug?: boolean }) {
 
         {panelOpen ? (
           <aside className="w-full lg:sticky lg:top-4 lg:self-start">
-            <JevBrainPanel decisions={decisions} thinking={thinking} />
+            <JevBrainPanel decisions={decisions} thinking={thinking} provider={provider} />
           </aside>
         ) : null}
       </div>
