@@ -9,9 +9,10 @@ import { DECISION_PROVIDERS, PROVIDER_INFO, type DecisionProvider, type JevDecis
 import { isTypingTarget } from "@/lib/keys";
 import type { SpriteId } from "@/lib/pixel/sprites";
 import { ENEMIES, type CombatOutcome, type CombatState, type Enemy, type PlayerAction } from "@/lib/story/combat";
+import { ITEMS, itemCount } from "@/lib/story/items";
 import { INITIAL_STATE, isHesitant, primaryAnswer } from "@/lib/story/state";
 import { CHAPTER_STARTS, NODES, START_NODE } from "@/lib/story/story";
-import type { CombatNode, EndingId, GameState, Line, NpcId, Option, Ref, StoryNode } from "@/lib/story/types";
+import type { CombatNode, EndingId, GameState, ItemId, Line, NpcId, Option, Ref, StoryNode } from "@/lib/story/types";
 import ChoiceMenu from "./ChoiceMenu";
 import CombatView from "./CombatView";
 import DialogBox from "./DialogBox";
@@ -501,15 +502,15 @@ export default function Game({ debug = false }: { debug?: boolean }) {
               />
               <div className="pixel-box space-y-3 p-4 text-[10px] leading-[1.9] text-[#c2c3c7]">
                 <p>
-                  Una aventura de 5 capítulos y <span className="text-[#ffec27]">4 finales</span>. Tú eliges cómo
-                  actuar; <span className="text-[#ff77a8]">{engine}</span> decide qué hacen los demás.
+                  Una aventura de 5 capítulos, 4 misiones secundarias y <span className="text-[#ffec27]">4 finales</span>.
+                  Tú eliges cómo actuar; <span className="text-[#ff77a8]">{engine}</span> decide qué hacen los demás.
                 </p>
                 <p>
                   En el <span className="text-[#ff77a8]">Modo {engine}</span> tú solo miras: {engine} juega al héroe con la
                   personalidad elegida, contra NPCs que también decide {engine}.
                 </p>
                 <p className="text-[9px] text-[#5f574f]">
-                  Controles: ↑↓ / 1-4 elegir · ENTER avanzar · E motor · J panel de decisiones · M sonido
+                  Controles: ↑↓ / 1-9 elegir · ENTER avanzar · E motor · J panel de decisiones · M sonido
                 </p>
               </div>
             </>
@@ -552,6 +553,7 @@ function TitleOverlay() {
 function Hud({ game }: { game: GameState }) {
   const pct = Math.max(0, (game.playerHealth / game.playerMaxHealth) * 100);
   const party = [game.companion, game.kaelAlly ? "Kael" : null].filter(Boolean).join(", ");
+  const items = (Object.keys(game.items) as ItemId[]).filter((id) => itemCount(game, id) > 0);
   return (
     <div className="pointer-events-none absolute left-2 top-2 flex flex-wrap items-center gap-x-3 gap-y-1 bg-black/60 px-2 py-1 text-[7px] sm:text-[9px]">
       <span className="flex items-center gap-1">
@@ -567,7 +569,17 @@ function Hud({ game }: { game: GameState }) {
       <span className="text-[#ffec27]">ORO {game.playerGold}</span>
       <span className="text-[#ff77a8]">POC {game.potions}</span>
       <span className="text-[#29adff]">HONOR {game.honor}</span>
+      <span className="text-[#ffa300]">REP {game.reputation}</span>
       {party ? <span className="text-[#00e436]">+ {party}</span> : null}
+      {items.length ? (
+        <span className="flex w-full flex-wrap gap-x-2 text-[6px] sm:text-[8px]">
+          {items.map((id) => (
+            <span key={id} className={ITEMS[id].harms ? "text-[#ff004d]" : "text-[#c2c3c7]"} title={ITEMS[id].description}>
+              {ITEMS[id].name} {ITEMS[id].finite ? `×${itemCount(game, id)}` : "∞"}
+            </span>
+          ))}
+        </span>
+      ) : null}
     </div>
   );
 }
@@ -599,7 +611,7 @@ function DebugBar({
       <div className="flex flex-wrap gap-2">
         {CHAPTER_STARTS.map((c) => (
           <button key={c.node} type="button" className="pixel-btn" onClick={() => jump(c.node)}>
-            Cap. {c.label}
+            {c.label}
           </button>
         ))}
       </div>

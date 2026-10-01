@@ -1,5 +1,6 @@
 import type { EncounterId } from "@/lib/jev/encounters";
 import type { ChoiceAnswer, JevDecision, JevState } from "@/lib/jev/types";
+import { hasItem, inventoryList, itemCount, itemWorks, removeItem } from "./items";
 import { allies, isHesitant, patch } from "./state";
 import type { EnemyId, GameState } from "./types";
 
@@ -44,7 +45,7 @@ export const ENEMIES: Record<EnemyId, Enemy> = {
   },
 };
 
-export type PlayerAction = "attack" | "defend" | "potion" | "flee";
+export type PlayerAction = "attack" | "defend" | "potion" | "flee" | "smoke_bomb" | "elixir" | "mirror";
 export type CombatOutcome = "win" | "lose" | "enemyFled" | "playerFled";
 
 export type CombatState = {
@@ -54,6 +55,8 @@ export type CombatState = {
   turn: number;
   lastPlayerAction: PlayerAction | "none";
   lastEnemyAction: string;
+  /** The silver mirror is raised: the next enemy attack bounces back. */
+  mirrorUp: boolean;
 };
 
 export const PLAYER_ACTION_TEXT: Record<PlayerAction | "none", string> = {
@@ -62,7 +65,24 @@ export const PLAYER_ACTION_TEXT: Record<PlayerAction | "none", string> = {
   defend: "raised their guard",
   potion: "drank a healing potion",
   flee: "tried to run away",
+  smoke_bomb: "threw a smoke bomb",
+  elixir: "drank a dubious elixir",
+  mirror: "raised a silver mirror to reflect the next attack",
 };
+
+/** Item each item action spends. */
+export const ACTION_ITEM = {
+  smoke_bomb: "smoke_bomb",
+  elixir: "dubious_elixir",
+  mirror: "silver_mirror",
+} as const;
+
+/** Whether the hero can take this action right now (has the potion or item it spends). */
+export function canUse(s: GameState, action: PlayerAction): boolean {
+  if (action === "potion") return s.potions > 0;
+  if (action in ACTION_ITEM) return hasItem(s, ACTION_ITEM[action as keyof typeof ACTION_ITEM]);
+  return true;
+}
 
 export function startCombat(enemy: Enemy, s: GameState): CombatState {
   return {
@@ -72,6 +92,7 @@ export function startCombat(enemy: Enemy, s: GameState): CombatState {
     turn: 1,
     lastPlayerAction: "none",
     lastEnemyAction: "none yet, the fight just started",
+    mirrorUp: false,
   };
 }
 
@@ -89,6 +110,8 @@ export function combatJevState(enemy: Enemy, c: CombatState, s: GameState): JevS
     playerPotions: s.potions,
     playerLastAction: PLAYER_ACTION_TEXT[c.lastPlayerAction],
     playerHasShield: s.hasShield,
+    playerItems: inventoryList(s),
+    playerMirrorRaised: c.mirrorUp,
     alliesFightingWithPlayer: allies(s).filter((a) => a !== "Sera" || enemy.id !== "morvath" || s.seraHelps),
   };
   if (enemy.id === "morvath") {
@@ -135,6 +158,32 @@ export function resolveTurn(
     } else {
       log.push("Buscas una poción... ¡no te queda ninguna!");
     }
+  } else if (action === "smoke_bomb" || action === "elixir" || action === "mirror") {
+    const item = ACTION_ITEM[action];
+    if (itemCount(game, item) === 0) {
+      log.push("Rebuscas en tu bolsa... ¡no te queda!");
+    } else {
+      const works = itemWorks(game, item);
+      game = removeItem(game, item);
+      if (!works) {
+        log.push("¡Era una falsificación de Vesper! No pasa nada.");
+      } else if (action === "smoke_bomb") {
+        log.push("¡Lanzas una bomba de humo y desapareces!");
+        return { game, combat, log, outcome: "playerFled", heroHit, enemyHit };
+      } else if (action === "elixir") {
+        if (Math.random() < 0.6) {
+          game = patch(game, { playerHealth: game.playerHealth + 50 });
+          log.push("El elixir arde en tu garganta... ¡y te revive! (+50 HP)");
+        } else {
+          game = patch(game, { playerHealth: Math.max(1, game.playerHealth - 20) });
+          heroHit = true;
+          log.push("El elixir estaba podrido. Te retuerces (−20 HP).");
+        }
+      } else {
+        combat = { ...combat, mirrorUp: true };
+        log.push("Alzas el espejo de plata.");
+      }
+    }
   } else if (action === "defend") {
     log.push("Levantas la guardia.");
   } else if (action === "flee") {
@@ -149,6 +198,7 @@ export function resolveTurn(
     if (enemy.id === "morvath" && game.blessed) dmg *= 1.3;
     if (enemy.id === "morvath" && game.knowsWeakness) dmg *= 1.5;
     if (enemyDefends) dmg *= 0.5;
+    if (itemWorks(game, "obsidian_dagger")) dmg += 4;
     dmg = Math.round(dmg);
     const parts = [`Golpeas a ${name} (−${dmg}).`];
     if (game.kaelAlly) {
@@ -203,9 +253,21 @@ export function resolveTurn(
         break;
       }
       if (power) dmg *= 1.8;
+      if (hesitant) dmg *= 0.6;
+      if (combat.mirrorUp) {
+        dmg = Math.round(dmg);
+        combat = { ...combat, mirrorUp: false, enemyHp: Math.max(0, combat.enemyHp - dmg) };
+        enemyHit = true;
+        log.push(`El espejo devuelve el ${power ? "golpe fuerte" : "ataque"} de ${name} (−${dmg}).`);
+        if (combat.enemyHp <= 0) {
+          log.push(`¡${name} ha caído!`);
+          return { game, combat, log, outcome: "win", heroHit, enemyHit };
+        }
+        break;
+      }
       if (action === "defend") dmg *= power ? 0.25 : 0.4;
       if (game.hasShield) dmg *= 0.8;
-      if (hesitant) dmg *= 0.6;
+      if (itemWorks(game, "moon_amulet")) dmg *= 0.85;
       dmg = Math.max(1, Math.round(dmg));
       game = patch(game, { playerHealth: Math.max(0, game.playerHealth - dmg) });
       heroHit = true;

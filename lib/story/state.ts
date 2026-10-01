@@ -9,6 +9,10 @@ export const INITIAL_STATE: GameState = {
   potions: 1,
   playerHasWeapon: true,
   honor: 5,
+  reputation: 5,
+  items: {},
+  fakes: [],
+  quests: [],
   companion: null,
   seraSpy: false,
   seraTrust: 0.5,
@@ -22,6 +26,9 @@ export const INITIAL_STATE: GameState = {
   warnedAboutSera: false,
   defeatedGrul: false,
   defeatedKael: false,
+  knownThief: false,
+  sparedDeserter: false,
+  morvathWarned: false,
   approach: "",
   goldOffered: 0,
   firstStrike: 0,
@@ -32,6 +39,7 @@ export const INITIAL_STATE: GameState = {
 export function patch(s: GameState, p: Partial<GameState>): GameState {
   const next = { ...s, ...p };
   next.honor = Math.min(10, Math.max(0, next.honor));
+  next.reputation = Math.min(10, Math.max(0, next.reputation));
   next.playerGold = Math.max(0, next.playerGold);
   next.playerHealth = Math.min(next.playerMaxHealth, next.playerHealth);
   return next;

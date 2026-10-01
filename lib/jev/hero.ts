@@ -1,5 +1,6 @@
 import type { CombatState, Enemy } from "@/lib/story/combat";
 import { PLAYER_ACTION_TEXT } from "@/lib/story/combat";
+import { inventoryList, itemCount } from "@/lib/story/items";
 import { allies } from "@/lib/story/state";
 import { NODES } from "@/lib/story/story";
 import type { GameState } from "@/lib/story/types";
@@ -36,6 +37,8 @@ function heroBase(s: GameState, personality: HeroPersonality): JevState {
     heroGold: s.playerGold,
     heroPotions: s.potions,
     heroHonor: `${s.honor}/10`,
+    heroReputation: `${s.reputation}/10`,
+    heroItems: inventoryList(s),
     companions: allies(s),
     swordBlessed: s.blessed,
     knowsMorvathWeakness: s.knowsWeakness,
@@ -98,6 +101,10 @@ export function heroCombatState(
     enemyLastAction: c.lastEnemyAction,
     heroLastAction: PLAYER_ACTION_TEXT[c.lastPlayerAction],
     potions: s.potions,
+    smokeBombs: itemCount(s, "smoke_bomb"),
+    elixirs: itemCount(s, "dubious_elixir"),
+    mirrors: itemCount(s, "silver_mirror"),
+    mirrorRaised: c.mirrorUp,
     isFinalBattle: enemy.id === "morvath",
   };
 }

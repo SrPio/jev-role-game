@@ -4,7 +4,10 @@ import { useEffect, useRef, useState } from "react";
 import { sfx } from "@/lib/audio/chiptune";
 import type { EncounterId } from "@/lib/jev/encounters";
 import type { JevDecision, JevState } from "@/lib/jev/types";
+import { itemCount } from "@/lib/story/items";
 import {
+  ACTION_ITEM,
+  canUse,
   combatJevState,
   resolveTurn,
   startCombat,
@@ -31,12 +34,29 @@ type Props = {
   engine?: string;
 };
 
-const ACTIONS: { id: PlayerAction; label: string }[] = [
+const BASE_ACTIONS: { id: PlayerAction; label: string }[] = [
   { id: "attack", label: "Atacar" },
   { id: "defend", label: "Defender" },
   { id: "potion", label: "Poción" },
   { id: "flee", label: "Huir" },
 ];
+
+const ITEM_ACTIONS: { id: keyof typeof ACTION_ITEM; label: string }[] = [
+  { id: "smoke_bomb", label: "Bomba de humo" },
+  { id: "elixir", label: "Elixir dudoso" },
+  { id: "mirror", label: "Espejo de plata" },
+];
+
+/** The four basic actions, plus one entry per combat item the hero carries. */
+function actionsFor(s: GameState) {
+  return [
+    ...BASE_ACTIONS.map((a) => (a.id === "potion" ? { ...a, label: `${a.label} (${s.potions})` } : a)),
+    ...ITEM_ACTIONS.filter((a) => itemCount(s, ACTION_ITEM[a.id]) > 0).map((a) => ({
+      ...a,
+      label: `${a.label} (${itemCount(s, ACTION_ITEM[a.id])})`,
+    })),
+  ];
+}
 
 const OUTCOME_TEXT: Record<CombatOutcome, string> = {
   win: "¡VICTORIA!",
@@ -82,13 +102,15 @@ export default function CombatView({
   const [picked, setPicked] = useState<number | undefined>(undefined);
   const [outcome, setOutcome] = useState<{ result: CombatOutcome; game: GameState } | null>(null);
 
+  const actions = actionsFor(game);
+
   const runTurn = async (pick: () => PlayerAction | Promise<PlayerAction>) => {
     if (busy || outcome) return;
     setBusy(true);
     setPicked(undefined);
     let action = await pick();
-    if (action === "potion" && game.potions === 0) action = "defend";
-    setPicked(ACTIONS.findIndex((a) => a.id === action));
+    if (!canUse(game, action)) action = "defend";
+    setPicked(actions.findIndex((a) => a.id === action));
     const decision = await decide(enemy.encounter, combatJevState(enemy, combat, game));
     const npc = choiceOf(decision, "action");
     const r = resolveTurn(enemy, combat, game, action, npc, decision.source);
@@ -152,11 +174,8 @@ export default function CombatView({
           }}
           disabled={busy || !!autoPick}
           highlight={autoPick ? picked : undefined}
-          options={ACTIONS.map((a) => ({
-            label: a.id === "potion" ? `${a.label} (${game.potions})` : a.label,
-            disabled: a.id === "potion" && game.potions === 0,
-          }))}
-          onPick={(i) => void runTurn(() => ACTIONS[i].id)}
+          options={actions.map((a) => ({ label: a.label, disabled: !canUse(game, a.id) }))}
+          onPick={(i) => void runTurn(() => actions[i].id)}
         />
       )}
     </div>

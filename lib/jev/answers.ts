@@ -66,6 +66,14 @@ function normalize(weights: Record<string, number>) {
   );
 }
 
+/** Hero combat actions that spend an item, and the state key holding how many are left. */
+const ITEM_COUNT_KEYS: Record<string, string> = {
+  potion: "potions",
+  smoke_bomb: "smokeBombs",
+  elixir: "elixirs",
+  mirror: "mirrors",
+};
+
 /**
  * Offline stand-in used only when the gateway is unreachable, so the demo
  * never dead-ends. Clearly flagged as "fallback" in the UI.
@@ -88,7 +96,7 @@ export function fallbackAnswers(
         if (hurt && option === "heal" && healsLeft > 0) w *= 3;
         if (hurt && option === "flee") w *= 1.5;
         if (option === "heal" && healsLeft <= 0) w *= 0.1;
-        if (option === "potion" && Number(state.potions ?? 0) <= 0) w *= 0.05;
+        if (option in ITEM_COUNT_KEYS && Number(state[ITEM_COUNT_KEYS[option]] ?? 0) <= 0) w *= 0.05;
         weights[option] = w;
       }
       const probabilities = normalize(weights);

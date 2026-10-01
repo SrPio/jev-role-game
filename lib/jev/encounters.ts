@@ -147,6 +147,7 @@ export const ENCOUNTERS = {
           bless: "Blesses the traveler's sword with holy light, making it stronger against Morvath",
           heal: "Heals all of the traveler's wounds",
           reveal_secret: "Reveals Morvath's weakness: the ember gem on his crown",
+          cleanse: "Purifies the traveler of a curse they carry (a cursed coin or a hermit's curse)",
           refuse: "Refuses to help the traveler",
         },
       },
@@ -168,6 +169,7 @@ export const ENCOUNTERS = {
           bless: "Bendecir espada",
           heal: "Curar heridas",
           reveal_secret: "Revelar debilidad",
+          cleanse: "Purificar maldición",
           refuse: "Negarse",
         },
       },
@@ -234,6 +236,136 @@ export const ENCOUNTERS = {
           stand_aside: "Apartarse",
         },
       },
+    },
+  },
+
+  // ── Side quests ──
+  oswin_caravan: {
+    npc: "Oswin",
+    title: "La caravana volcada",
+    primary: "reward",
+    questions: {
+      reward: {
+        type: "choice",
+        instructions:
+          "Decide what Oswin the merchant gives the traveler after what they just did at his overturned caravan. If they looted him, he only gives something out of fear.",
+        criteria: {
+          guild_letter: "Hands over a sealed letter of the merchant guild, respected even by outlaws who trade with the guild",
+          smoke_bombs: "Gives two smoke bombs from his cargo",
+          gold: "Pays the traveler 20 gold",
+          nothing: "Gives the traveler nothing",
+        },
+      },
+      spread_word: {
+        type: "boolean",
+        instructions:
+          "Will Oswin tell every town and tavern in the region about what the traveler did here, good or bad?",
+      },
+    },
+    meta: {
+      reward: {
+        label: "¿Qué te da Oswin?",
+        options: {
+          guild_letter: "Carta del gremio",
+          smoke_bombs: "2 bombas de humo",
+          gold: "20 de oro",
+          nothing: "Nada",
+        },
+      },
+      spread_word: { label: "¿Lo contará por la región?" },
+    },
+  },
+
+  odo_shrine: {
+    npc: "Odo",
+    title: "El santuario del ermitaño",
+    primary: "gift",
+    questions: {
+      gift: {
+        type: "choice",
+        instructions:
+          "Decide how Odo the old hermit answers the traveler who came to his shrine. If the traveler stole his lantern, decide whether he forgives or curses them.",
+        criteria: {
+          lantern: "Gives (or lets them keep) the eternal lantern that reveals ambushes and hidden passages",
+          amulet: "Gives a moon amulet that softens every blow",
+          nothing: "Gives only kind words and sends them on their way",
+          curse: "Curses the traveler, sapping their vitality",
+        },
+      },
+    },
+    meta: {
+      gift: {
+        label: "¿Qué hace Odo?",
+        options: {
+          lantern: "Dar la linterna",
+          amulet: "Dar el amuleto",
+          nothing: "Nada",
+          curse: "Maldecirte",
+        },
+      },
+    },
+  },
+
+  brann_deserter: {
+    npc: "Brann",
+    title: "El desertor",
+    primary: "action",
+    questions: {
+      action: {
+        type: "choice",
+        instructions: "The traveler has spared Brann, a deserter from Morvath's army, from the villagers' rope. Decide what Brann does now.",
+        criteria: {
+          reveal: "Reveals the secret of the ember gem on Morvath's crown and gives the traveler a silver mirror that reflects dark magic",
+          betray: "Steals part of the traveler's gold, runs, and sells the traveler's description to Morvath to buy his pardon",
+          flee: "Simply runs into the woods and is never seen again",
+        },
+      },
+      grateful: {
+        type: "boolean",
+        instructions: "Is Brann genuinely grateful to the traveler?",
+      },
+    },
+    meta: {
+      action: {
+        label: "¿Qué hace Brann?",
+        options: { reveal: "Revelar secreto", betray: "Traicionarte", flee: "Huir" },
+      },
+      grateful: { label: "¿Está agradecido?" },
+    },
+  },
+
+  vesper_shop: {
+    npc: "Vesper",
+    title: "La mercader de sombras",
+    primary: "deal",
+    questions: {
+      deal: {
+        type: "choice",
+        instructions:
+          "The traveler wants to trade with Vesper, a black-market dealer camped at the foot of Morvath's tower. Decide what deal she makes.",
+        criteria: {
+          fair: "Trades at the fair price",
+          double_price: "Doubles the price, sensing the traveler's need or bad name",
+          refuse: "Refuses to trade with the traveler",
+          tip_passage: "Trades at the fair price and, won over, also reveals a secret passage into the tower",
+        },
+      },
+      cheat: {
+        type: "boolean",
+        instructions: "Does Vesper hand over a convincing fake (or pay with false coins) instead of the real thing?",
+      },
+    },
+    meta: {
+      deal: {
+        label: "¿Qué trato hace Vesper?",
+        options: {
+          fair: "Precio justo",
+          double_price: "Precio doble",
+          refuse: "No venderte",
+          tip_passage: "Revelar pasadizo",
+        },
+      },
+      cheat: { label: "¿Te engaña?" },
     },
   },
 
@@ -304,13 +436,24 @@ export const ENCOUNTERS = {
           defend: "Raises their guard to take less damage this turn",
           potion: "Drinks a healing potion (+30 HP), only possible if potions remain",
           flee: "Tries to run away from the fight (may fail)",
+          smoke_bomb: "Throws a smoke bomb to escape for sure, only possible if smoke bombs remain",
+          elixir: "Drinks the dubious elixir: likely +50 HP, but may poison (-20 HP), only possible if one remains",
+          mirror: "Raises the silver mirror to reflect the enemy's next attack, only possible if one remains",
         },
       },
     },
     meta: {
       action: {
         label: "¿Qué hace el héroe?",
-        options: { attack: "Atacar", defend: "Defender", potion: "Poción", flee: "Huir" },
+        options: {
+          attack: "Atacar",
+          defend: "Defender",
+          potion: "Poción",
+          flee: "Huir",
+          smoke_bomb: "Bomba de humo",
+          elixir: "Elixir dudoso",
+          mirror: "Espejo de plata",
+        },
       },
     },
   },

@@ -22,6 +22,11 @@ export const ENDINGS: Record<EndingId, Ending> = {
         : s.savedVillagers
           ? { text: "En Brinmoor levantan una estatua en tu honor, junto al granero reconstruido." }
           : { text: "Tu leyenda apenas comienza." },
+      s.reputation >= 7
+        ? { text: "Tu fama te precede: todo Eldmoor sale a las calles y el pueblo te corona con flores." }
+        : s.reputation <= 3
+          ? { text: "Pero nadie cree tu historia. En las tabernas murmuran que robaste la corona para ti." }
+          : { text: "Algunos te aclaman; otros aún desconfían del viajero de la vieja espada." },
     ],
   },
   pact: {

@@ -3,7 +3,8 @@
 RPG pixel art 8-bit donde los NPC **toman decisiones con Jev** (TypeSafe) vía Vercel AI Gateway,
 o con [**Laya**](https://github.com/NandhaKishorM/laya), su alternativa open source autoalojada.
 Jev no genera diálogo: recibe un estado tipado y devuelve `choice` + `probabilities` + `confidence`,
-y el juego ejecuta esa decisión. 5 capítulos, combates por turnos y 4 finales.
+y el juego ejecuta esa decisión. 5 capítulos, 4 misiones secundarias, inventario, reputación,
+combates por turnos y 4 finales.
 
 ![Pantalla de título](docs/screenshots/titulo.png)
 
@@ -24,9 +25,36 @@ y el juego ejecuta esa decisión. 5 capítulos, combates por turnos y 4 finales.
 ## Mapa de decisiones
 
 [`docs/diagrams/decisiones.excalidraw`](docs/diagrams/decisiones.excalidraw) recoge cada elección del héroe,
-cada decisión de los NPC, los combates y cómo se llega a cada uno de los 4 finales. Se abre en
+cada decisión de los NPC, los combates, las misiones secundarias, los objetos que obtienes y cómo se
+llega a cada uno de los 4 finales. Se abre en
 [excalidraw.com](https://excalidraw.com) (menú → Abrir) y hay una vista previa en
 [`docs/diagrams/decisiones.svg`](docs/diagrams/decisiones.svg).
+
+## Misiones secundarias
+
+Entre cada par de capítulos aparece una misión opcional. El héroe elige qué hacer (o sigue de largo) y un
+NPC nuevo decide con el motor. El resultado cambia lo que viene después:
+
+| Misión | Dónde | El NPC decide | Qué cambia |
+| --- | --- | --- | --- |
+| **La caravana volcada** | Entre I y II | Oswin: qué te da y si lo cuenta por la región | Carta del gremio o bombas de humo. Si le saqueas, Moneda maldita; y si lo cuenta, Sera sabe que eres ladrón |
+| **El santuario del ermitaño** | Entre II y III | Odo: linterna, amuleto, nada o maldición | La Linterna revela la emboscada de Kael y el pasadizo de la torre |
+| **El desertor** | Entre III y IV | Brann: revelar el secreto, traicionarte o huir | Espejo de plata y debilidad de Morvath, o Morvath te espera y ataca primero |
+| **La mercader de sombras** | Entre IV y V | Vesper: precio, negativa, pasadizo y si te engaña | Daga, elixir o espejo (quizá falsos); vender la Moneda maldita |
+
+## Reputación y objetos
+
+- **Honor** mide lo que haces; **reputación** (0–10, empieza en 5) mide lo que Eldmoor *dice* de ti. Solo
+  cambia cuando alguien lo ve o lo cuenta, y eso lo decide el motor. Sera, Kael, Ysolde, Odo, Brann, Vesper y
+  Morvath la reciben como input, y el final del héroe cambia con ella.
+- **Inventario** (`lib/story/items.ts`), visible en el HUD:
+  - Finitos (×n, se gastan): poción, bomba de humo, elixir dudoso (puede curarte o envenenarte), espejo de
+    plata y carta del gremio.
+  - Infinitos (∞): linterna del ermitaño, amuleto lunar y daga de obsidiana.
+  - Perjudiciales: Moneda maldita (−1 de reputación en cada etapa) y Maldición del ermitaño (−20 HP
+    máximos). Ysolde puede purificarlas.
+- Los objetos de combate aparecen en el menú de combate solo si los llevas. En el Modo Jev, el motor también
+  puede usarlos.
 
 ## Arranque
 
@@ -113,4 +141,4 @@ define las preguntas; en combate, Jev elige la acción del héroe con el encuent
 
 El Modo Jev también funciona con Laya como motor: entonces Laya juega al héroe contra NPCs decididos por Laya.
 
-Controles: ↑↓ / 1-4 elegir · ENTER avanzar · E motor (en el título) · J panel de decisiones · M sonido.
+Controles: ↑↓ / 1-9 elegir · ENTER avanzar · E motor (en el título) · J panel de decisiones · M sonido.

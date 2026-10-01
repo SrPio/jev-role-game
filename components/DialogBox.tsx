@@ -11,6 +11,11 @@ const SPEAKER_COLORS: Record<string, string> = {
   Kael: "text-[#83769c]",
   Ysolde: "text-[#ffec27]",
   Morvath: "text-[#ff004d]",
+  Oswin: "text-[#ffa300]",
+  Odo: "text-[#c2c3c7]",
+  Brann: "text-[#ab5236]",
+  Vesper: "text-[#c08cff]",
+  Aldeano: "text-[#fff1e8]",
 };
 
 type Props = {

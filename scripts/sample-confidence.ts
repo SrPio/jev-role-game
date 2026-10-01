@@ -14,8 +14,29 @@ const BASE = process.env.GAME_URL ?? "http://localhost:3000";
 
 const variants: GameState[] = [
   INITIAL_STATE,
-  { ...INITIAL_STATE, playerHealth: 35, playerGold: 5, potions: 0, honor: 2 },
-  { ...INITIAL_STATE, playerGold: 60, honor: 8, companion: "Sera", kaelAlly: true, blessed: true, hasShield: true },
+  {
+    ...INITIAL_STATE,
+    playerHealth: 35,
+    playerGold: 5,
+    potions: 0,
+    honor: 2,
+    reputation: 1,
+    knownThief: true,
+    items: { cursed_coin: 1, smoke_bomb: 1 },
+    approach: "loot",
+  },
+  {
+    ...INITIAL_STATE,
+    playerGold: 60,
+    honor: 8,
+    reputation: 9,
+    companion: "Sera",
+    kaelAlly: true,
+    blessed: true,
+    hasShield: true,
+    items: { hermit_lantern: 1, silver_mirror: 1, dubious_elixir: 1, guild_letter: 1 },
+    approach: "help_caravan",
+  },
 ];
 
 type Sample = { group: string; options: number; confidence: number; source: string };
@@ -49,7 +70,7 @@ async function main() {
       }
     }
   }
-  const actions: PlayerAction[] = ["attack", "defend", "potion", "flee"];
+  const actions: PlayerAction[] = ["attack", "defend", "potion", "flee", "smoke_bomb", "elixir", "mirror"];
   for (const enemy of Object.values(ENEMIES)) {
     for (const s of variants) {
       for (const frac of [1, 0.6, 0.25, 0.08]) {
